@@ -12,27 +12,6 @@ in a horizontal, vertical, or diagonal row is the winner.
 import random
 
 
-# Clear any historical output and show the game list
-print('\n'*100)
-
-# Defining rows of a board
-pos = ['not_used',
-       '1', '2', '3',
-       '4', '5', '6',
-       '7', '8', '9'
-       ]
-
-# Defining board itself
-board = (
-
-    f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
-    '---|---|---\n'
-    f'  {pos[4]} | {pos[5]} | {pos[6]} \n '
-    '---|---|---\n'
-    f'  {pos[1]} | {pos[2]} | {pos[3]} \n'
-
-)
-
 # Defining functions
 
 
@@ -213,12 +192,37 @@ def proceed():
         return False
 
 
+# Clear any historical output and show the game list
+print('\n'*100)
+
+# Defining rows of a board
+pos = ['not_used',
+       '1', '2', '3',
+       '4', '5', '6',
+       '7', '8', '9'
+       ]
+
+# Defining board itself
+board = (
+
+    f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
+    '---|---|---\n'
+    f'  {pos[4]} | {pos[5]} | {pos[6]} \n '
+    '---|---|---\n'
+    f'  {pos[1]} | {pos[2]} | {pos[3]} \n'
+
+)
+
+
 # Setting initial service variables
 game_on = True
 player1 = 'Empty'
 player2 = 'Empty'
 win = 'nobody'
 board_full = False
+
+# Storing total wins data
+wins_data = {'Player 1': 0, 'Player 2': 0}
 
 # Printing Welcome message
 print('\n'*100)
@@ -292,9 +296,11 @@ while game_on and game_start:
         # Checking winner
         win = check_win()
 
+        # Actions if win accurse
         if win != 'nobody':
             print('\n'*100)
             print(f'{win} won!\n')
+            wins_data[win] += 1
             print(board)
 
         # Checking full board
@@ -311,3 +317,13 @@ while game_on and game_start:
 
     # Ask if you want to keep playing
     game_on = continue_game()
+
+    if not game_on:
+        print('\n'*100)
+        print("| {0:=^19} |".format(' GAME OVER '))
+        print("| {0:^19} |".format(' '))
+        print("| {0:-^19} |".format(' Score: '))
+        print("| {0:^8} | {1:^8} |".format('Player 1', 'Player 2'))
+        print("| {0:^8} | {1:^8} |".format(wins_data['Player 1'],
+                                           wins_data['Player 2']))
+        print('\n')
