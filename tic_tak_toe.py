@@ -192,6 +192,17 @@ def proceed():
         return False
 
 
+def game_over():
+    print('\n'*100)
+    print("| {0:=^19} |".format(' GAME OVER '))
+    print("| {0:^19} |".format(' '))
+    print("| {0:-^19} |".format(' Score: '))
+    print("| {0:^8} | {1:^8} |".format('Player 1', 'Player 2'))
+    print("| {0:^8} | {1:^8} |".format(wins_data['Player 1'],
+                                       wins_data['Player 2']))
+    print('\n')
+
+
 # Clear any historical output and show the game list
 print('\n'*100)
 
@@ -318,12 +329,6 @@ while game_on and game_start:
     # Ask if you want to keep playing
     game_on = continue_game()
 
+    # Displaying final game scores
     if not game_on:
-        print('\n'*100)
-        print("| {0:=^19} |".format(' GAME OVER '))
-        print("| {0:^19} |".format(' '))
-        print("| {0:-^19} |".format(' Score: '))
-        print("| {0:^8} | {1:^8} |".format('Player 1', 'Player 2'))
-        print("| {0:^8} | {1:^8} |".format(wins_data['Player 1'],
-                                           wins_data['Player 2']))
-        print('\n')
+        game_over()
