@@ -30,11 +30,7 @@ board = (
 
 )
 
-# Printing Welcome message
-print('Welcome to the Tic Tak Toe game! '
-      'You pick the spot by index.\n'
-      'Here is the board indexes:')
-print(board)
+# Defining functions
 
 
 def game_board(board):
@@ -148,14 +144,18 @@ def check_win():
         return 'nobody'
 
 
-# Service variables.
+# Setting initial service variables
 game_on = True
 player1 = 'Empty'
 player2 = 'Empty'
 turn = 1
-
-# win marker
 win = 'nobody'
+
+# Printing Welcome message
+print('Welcome to the Tic Tak Toe game! '
+      'You pick the spot by index.\n'
+      'Here is the board indexes:')
+print(board)
 
 # Choose a marker
 player1 = user_pic()
