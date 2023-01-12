@@ -88,6 +88,7 @@ Shows overall game score (game over screen)
 ### log_score
 
 Writes down overall game score after players done playing into _'scores.txt'_.
+Structure of a log file is: 'date, name, score'
 
 ### set_names
 
