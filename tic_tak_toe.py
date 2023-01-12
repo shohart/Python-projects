@@ -45,15 +45,21 @@ def game_board(board):
 def user_pic():
     # Pick a side X or O
 
-    pic = 'EMPTY CHOICE'
+    player1 = '_'
+    player2 = '_'
 
-    while pic not in 'XO':
-        pic = input('Player 1! Pick a side! X or O? ').upper()
-        if pic not in 'XO':
+    while player1 not in 'XO':
+        player1 = input('Player 1! Pick a side! X or O? ').upper()
+        if player1 not in 'XO':
             print('\n'*100)
             print('Sorry, you need to enter X or O!')
 
-    return pic
+    if player1 == 'X':
+        player2 = 'O'
+    else:
+        player2 = 'X'
+
+    return player1, player2
 
 
 def user_choice():
@@ -221,13 +227,8 @@ print('Welcome to the Tic Tak Toe game! '
       'Here is the board indexes:\n')
 print(board)
 
-# Choose a marker
-player1 = user_pic()
-
-if player1 == 'X':
-    player2 = 'O'
-else:
-    player2 = 'X'
+# Choose a marker for players
+player1, player2 = user_pic()
 
 # Clear output
 print('\n'*100)
