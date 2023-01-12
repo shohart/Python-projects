@@ -8,6 +8,9 @@ The player who succeeds in placing three of their marks
 in a horizontal, vertical, or diagonal row is the winner.
 
 """
+# Import libraries
+import random
+
 
 # Clear any historical output and show the game list
 print('\n'*100)
@@ -35,6 +38,7 @@ board = (
 
 def game_board(board):
     # Drawing a game board
+    print()
     print(board)
 
 
@@ -144,36 +148,14 @@ def check_win():
         return 'nobody'
 
 
-# Setting initial service variables
-game_on = True
-player1 = 'Empty'
-player2 = 'Empty'
-turn = 1
-win = 'nobody'
-
-# Printing Welcome message
-print('Welcome to the Tic Tak Toe game! '
-      'You pick the spot by index.\n'
-      'Here is the board indexes:')
-print(board)
-
-# Choose a marker
-player1 = user_pic()
-
-if player1 == 'X':
-    player2 = 'O'
-else:
-    player2 = 'X'
-
-# Print marker info
-print('\n'*100)
-print(f'Player 1: {player1}')
-print(f'Player 2: {player2}\n')
+def choose_first():
+    # Choose who goes first on a game
+    return random.randint(1, 2)
 
 
-# Main game cycle
-while game_on:
-    # Defaulting board values
+def reset_board():
+    # Set all the values to default
+
     win = 'nobody'
 
     pos = [
@@ -193,8 +175,86 @@ while game_on:
 
     )
 
+    turn = choose_first()
+
+    return win, pos, board, turn
+
+
+def board_full_check():
+    # Check if the board is full or not
+    return ' ' not in pos
+
+
+def proceed():
+    # Define actual start of the game
+
+    go_game = 'empty value'
+
+    while go_game.capitalize() not in ['Yes', 'No']:
+
+        go_game = input('Start the game? Enter Yes or No: ')
+
+        if go_game.capitalize() not in ['Yes', 'No']:
+            print("Sorry, I didn't understand.\n"
+                  "Please make sure to enter Yes or No.")
+
+    if go_game.capitalize() == "Yes":
+        # Game is still on
+        return True
+
+    else:
+        # Game is over
+        return False
+
+
+# Setting initial service variables
+game_on = True
+player1 = 'Empty'
+player2 = 'Empty'
+win = 'nobody'
+board_full = False
+
+# Printing Welcome message
+print('\n'*100)
+print('Welcome to the Tic Tak Toe game! '
+      'You pick the spot by index.\n'
+      'Here is the board indexes:\n')
+print(board)
+
+# Choose a marker
+player1 = user_pic()
+
+if player1 == 'X':
+    player2 = 'O'
+else:
+    player2 = 'X'
+
+# Clear output
+print('\n'*100)
+
+game_start = True
+
+# Main game cycle
+while game_on and game_start:
+
+    # Defaulting board values
+    win, pos, board, turn = reset_board()
+    board_full = board_full_check()
+    game_start = True
+
+    # Clear any historical output and show the game list
+    print('\n'*100)
+
+    # Printing info
+    print(f'Player 1: {player1}')
+    print(f'Player 2: {player2}')
+    print(f'Player {turn} goes first!\n')
+
+    # Promt to start the game
+    game_start = proceed()
+
     # Turn cycle
-    while win == 'nobody' and ' ' in pos:
+    while win == 'nobody' and not board_full:
 
         # Clear any historical output and show the game list
         print('\n'*100)
@@ -225,19 +285,25 @@ while game_on:
 
         )
 
-        # Clear Screen and show the updated game board
-        print('\n'*100)
+        # Show the updated game board
         game_board(board)
 
         # Checking winner
         win = check_win()
 
         if win != 'nobody':
-            print(f'{win} won!')
+            print('\n'*100)
+            print(f'{win} won!\n')
+            print(board)
 
-        # Checking for a tie
-        if ' ' not in pos and win == 'nobody':
+        # Checking full board
+        board_full = board_full_check()
+
+        # Checking for a full board and no win
+        if board_full and win == 'nobody':
+            print('\n'*100)
             print('No free spots left on a board! It seems to be a tie!\n')
+            print(board)
 
         # Adding to a turn counter
         turn += 1

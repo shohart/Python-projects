@@ -13,8 +13,13 @@ This is a simple game of tic tac toe written in Python. The game is played betwe
    - [continue_game](#continue_game)
    - [board_replace](#board_replace)
    - [check_win](#check_win)
+   - [choose_first](#choose_first)
+   - [reset board](#reset_board)
+   - [board full check](#board_full_check)
+   - [proceed](#proceed)
 4. [Project structure](#project-structure)
-5. [Installation](#installation)
+5. [Libraries](#libraries)
+6. [Installation](#installation)
 
 ## Game Layout
 
@@ -57,6 +62,22 @@ This function is used to replace the board with the player's mark.
 
 This function is used to check if either player has won the game.
 
+### choose_first
+
+Randomly selects a player to go first
+
+### reset_board
+
+Sets all the values to default
+
+### board_full_check
+
+Checks if the board is full or not
+
+### proceed
+
+Asks the user if they want to start the game
+
 ## Project Structure
 
 Project contains 4 files:
@@ -71,3 +92,7 @@ Project contains 4 files:
 ```Git
 git clone https://github.com/shohart/TicTakToe.git
 ```
+
+## Libraries
+
+- random
