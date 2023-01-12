@@ -2,6 +2,20 @@
 
 This is a simple game of tic tac toe written in Python. The game is played between two players, who take turns marking the spaces in a 3x3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner.
 
+## Glossary
+
+1. [Game Layout](#game-layout)
+2. [Gameplay](#gameplay)
+3. [Used functions](#functions)
+   - [game_board](#game_board)
+   - [user_pic](#user_pic)
+   - [user_choice](#user_choice)
+   - [continue_game](#continue_game)
+   - [board_replace](#board_replace)
+   - [check_win](#check_win)
+4. [Project structure](#project-structure)
+5. [Installation](#installation)
+
 ## Game Layout
 
 The game board is made up of nine squares, each identified by a number ranging from 1 to 9. The board is set up as follows:
@@ -42,3 +56,18 @@ This function is used to replace the board with the player's mark.
 ### check_win
 
 This function is used to check if either player has won the game.
+
+## Project Structure
+
+Project contains 4 files:
+
+- [tic_tak_toe.ipynb](./tic_tak_toe.ipynb) - Jupiter notebook with development stages and steps.
+- [tic_tak_toe.py](./tic_tak_toe.py) - a python script, containing main code of the project.
+- [requirements.txt](./requirements.txt) - a list of python modules and versions.
+- [README.md](./README.md) - this file.
+
+## Installation
+
+```Git
+git clone https://github.com/shohart/TicTakToe.git
+```
