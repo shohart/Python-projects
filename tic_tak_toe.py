@@ -10,6 +10,8 @@ in a horizontal, vertical, or diagonal row is the winner.
 """
 # Import libraries
 import random
+import os
+import datetime as dt
 
 
 # Defining functions
@@ -69,16 +71,16 @@ def continue_game():
 
     go_game = 'empty value'
 
-    while go_game.capitalize() not in ['Yes', 'No']:
+    while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
 
         go_game = input('Continue? Enter Yes or No: ')
 
-        if go_game.capitalize() not in ['Yes', 'No']:
+        if go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
             print('\n'*100)
             print("Sorry, I didn't understand.\n"
                   "Please make sure to enter Yes or No.")
 
-    if go_game.capitalize() == "Yes":
+    if go_game.capitalize() in ['Yes', 'Y']:
         # Game is still on
         return True
 
@@ -175,7 +177,7 @@ def proceed():
 
     go_game = 'empty value'
 
-    while go_game.capitalize() not in ['Yes', 'No']:
+    while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
 
         go_game = input('Start the game? Enter Yes or No: ')
 
@@ -183,7 +185,7 @@ def proceed():
             print("Sorry, I didn't understand.\n"
                   "Please make sure to enter Yes or No.")
 
-    if go_game.capitalize() == "Yes":
+    if go_game.capitalize() in ['Yes', 'Y']:
         # Game is still on
         return True
 
@@ -197,10 +199,35 @@ def game_over():
     print("| {0:=^19} |".format(' GAME OVER '))
     print("| {0:^19} |".format(' '))
     print("| {0:-^19} |".format(' Score: '))
-    print("| {0:^8} | {1:^8} |".format('Player 1', 'Player 2'))
+    print("| {0:^8} | {1:^8} |".format(names_data['Player 1'],
+                                       names_data['Player 2']))
     print("| {0:^8} | {1:^8} |".format(wins_data['Player 1'],
                                        wins_data['Player 2']))
     print('\n')
+
+
+def log_score(name, score):
+    # Write game scores to file
+
+    filename = 'scores.txt'
+
+    if os.path.exists(filename):
+        append_write = 'a'  # append if already exists
+    else:
+        append_write = 'w'  # make a new file if not
+
+    with open(filename, append_write) as score_file:
+        score_file.write(str(dt.date.today()) + ',' +
+                         name + ',' + str(score) + '\n')
+
+
+def set_names():
+    # Ask players names
+
+    name1 = input('Player 1 enter your name: ')
+    name2 = input('Player 2 enter your name: ')
+
+    return name1, name2
 
 
 # Clear any historical output and show the game list
@@ -235,12 +262,18 @@ board_full = False
 # Storing total wins data
 wins_data = {'Player 1': 0, 'Player 2': 0}
 
+# Storing player names
+names_data = {'Player 1': 'Unknown', 'Player 2': 'Unknown'}
+
 # Printing Welcome message
 print('\n'*100)
 print('Welcome to the Tic Tak Toe game! '
       'You pick the spot by index.\n'
       'Here is the board indexes:\n')
 print(board)
+
+# Ask for player names
+names_data['Player 1'], names_data['Player 2'] = set_names()
 
 # Choose a marker for players
 player1, player2 = user_pic()
@@ -262,8 +295,8 @@ while game_on and game_start:
     print('\n'*100)
 
     # Printing info
-    print(f'Player 1: {player1}')
-    print(f'Player 2: {player2}')
+    print(f"Player 1 = {names_data['Player 1']} = {player1}")
+    print(f"Player 2 = {names_data['Player 2']} = {player2}")
     print(f'Player {turn} goes first!\n')
 
     # Promt to start the game
@@ -280,9 +313,9 @@ while game_on and game_start:
 
         # Greet a marker
         if turn % 2 != 0:
-            print('Turn: Player 1')
+            print(f"Turn: {names_data['Player 1']}")
         else:
-            print('Turn: Player 2')
+            print(f"Turn: {names_data['Player 2']}")
 
         # Have player choose position
         position = user_choice()
@@ -310,7 +343,7 @@ while game_on and game_start:
         # Actions if win accurse
         if win != 'nobody':
             print('\n'*100)
-            print(f'{win} won!\n')
+            print(f'{names_data[win]} won!\n')
             wins_data[win] += 1
             print(board)
 
@@ -332,3 +365,5 @@ while game_on and game_start:
     # Displaying final game scores
     if not game_on:
         game_over()
+        log_score(names_data['Player 1'], wins_data['Player 1'])
+        log_score(names_data['Player 2'], wins_data['Player 2'])

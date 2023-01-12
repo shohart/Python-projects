@@ -18,6 +18,8 @@ This is a simple game of tic tac toe written in Python. The game is played betwe
    - [board full check](#board_full_check)
    - [proceed](#proceed)
    - [game_over](#game_over)
+   - [log_score](#log_score)
+   - [set_names](#set_names)
 4. [Project structure](#project-structure)
 5. [Libraries](#libraries)
 6. [Installation](#installation)
@@ -83,6 +85,14 @@ Asks the user if they want to start the game
 
 Shows overall game score (game over screen)
 
+### log_score
+
+Writes down overall game score after players done playing into _'scores.txt'_.
+
+### set_names
+
+Asks players to enter their names to be used in the output and _'scores.txt'_.
+
 ## Project Structure
 
 Project contains 4 files:
@@ -101,3 +111,5 @@ git clone https://github.com/shohart/TicTakToe.git
 ## Libraries
 
 - random
+- datetime
+- os
