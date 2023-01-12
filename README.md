@@ -17,6 +17,7 @@ This is a simple game of tic tac toe written in Python. The game is played betwe
    - [reset board](#reset_board)
    - [board full check](#board_full_check)
    - [proceed](#proceed)
+   - [game_over](#game_over)
 4. [Project structure](#project-structure)
 5. [Libraries](#libraries)
 6. [Installation](#installation)
@@ -77,6 +78,10 @@ Checks if the board is full or not
 ### proceed
 
 Asks the user if they want to start the game
+
+### game_over
+
+Shows overall game score (game over screen)
 
 ## Project Structure
 
