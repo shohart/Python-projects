@@ -21,24 +21,24 @@ def random_predict_midl(number: int = np.random.randint(1, 101)) -> int:
     if number not in range(1, 101):  # protection form a wrong input
         raise ValueError('Number not in range!')
 
-    min, max = 1, 101  # set minimum and maximum numbers in range.
+    minimum, maximum = 1, 101  # set minimum and maximum numbers in range.
     count = 0  # number of tries
 
     while True:
         count += 1
-        midl = (min+max) // 2
+        midl = (minimum + maximum) // 2
 
         if midl > number:
-            max = midl
+            maximum = midl
 
         elif midl < number:
-            min = midl
+            minimum = midl
 
         else:
             return count
 
 
-def score_game_midl(random_predict_midl) -> int:
+def score_game_midl(func) -> int:
     """Benchmark, how much tries does our algorythm need to solve a task.
 
     Args:
@@ -53,7 +53,7 @@ def score_game_midl(random_predict_midl) -> int:
     random_array = np.random.randint(1, 101, size=(1000))  # list of integers
 
     for number in random_array:
-        count_ls.append(random_predict_midl(number))
+        count_ls.append(func(number))
 
     score = int(np.mean(count_ls))
 

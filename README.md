@@ -2,7 +2,7 @@
 
 This is a repository of Python projects created for the Udemy course "Python Projects for Beginners".
 
-## Contents:
+## Contents
 
 [Project 1: Tic-Tac-Toe](https://github.com/shohart/UDEMY-python-projects/tree/master/project_1_tic_tak_toe_game)
 

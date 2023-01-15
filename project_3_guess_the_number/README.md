@@ -1,4 +1,4 @@
-# Project 1. Task 8.1 from SkillFactory python course.
+# Project 1. Task 8.1 from SkillFactory python course
 
 ## Table of contents
 
@@ -46,7 +46,7 @@ No additional data used in this project.
 
 :arrow_up:[to table of contents](README.md#Table-of-contents)
 
-### Results and conclusions:
+### Results and conclusions
 
 We got an algorithm that can guess an integer in 5 tries average. We froze requirements using pip in requirements.txt.
 
