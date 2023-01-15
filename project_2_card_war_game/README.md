@@ -40,3 +40,11 @@ This class represents a Player in a game. It has two attributes: name and all_ca
 - The player who reveals a card with the higher value wins all the cards from the war.
 - If both cards have the same value, the war continues until one player runs out of cards or both players agree to end the game.
 - The player with all the cards at the end of the game wins.
+
+## Installation
+
+
+
+## Libraries
+
+- random
