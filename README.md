@@ -1,6 +1,6 @@
 # UDEMY Python Projects
 
-This is a repository of Python projects created for the Udemy course "Python Projects for Beginners".
+This is a repository of Python projects created during UDEMY course "The Complete Python Bootcamp".
 
 ## Contents
 
