@@ -1,4 +1,5 @@
 """Guess a number game:
+
 Computer generates a random integer and tries to guess that integer in
 a minimum number of tries possible.
 """
