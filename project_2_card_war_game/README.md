@@ -7,6 +7,8 @@ This is a Python implementation of the classic card game War.
 1. [Overview](#overview)
 2. [Classes](#classes)
 3. [How to play](#how-to-play)
+4. [Installation](#installation)
+5. [Libraries](#libraries)
 
 ## Overview
 
