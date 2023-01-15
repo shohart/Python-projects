@@ -10,6 +10,8 @@
 
 ### Project description
 
+This game is used to find a random number in a minimum number of tries possible.
+To play, the computer generates a random integer between 1 and 100, and the user has to guess what number it is.
 Creating an algorithm to guess the number the computer guessed in the minimum number of tries possible.
 
 :arrow_up:[to table of contents](README.md#Table-of-contents)
