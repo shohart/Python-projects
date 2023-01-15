@@ -43,7 +43,12 @@ This class represents a Player in a game. It has two attributes: name and all_ca
 
 ## Installation
 
-
+```Git
+git clone --no-checkout https://github.com/shohart/ shohart
+cd shohart
+git sparse-checkout init --cone
+git sparse-checkout set UDEMY-python-projects/project_2_card_war_game
+```
 
 ## Libraries
 
