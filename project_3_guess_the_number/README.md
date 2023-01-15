@@ -1,4 +1,4 @@
-# Project 1. Task 8.1 from SkillFactory python course
+# Project 3. Guess the number game
 
 ## Table of contents
 
