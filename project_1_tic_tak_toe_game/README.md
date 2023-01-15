@@ -106,7 +106,11 @@ Project contains 4 files:
 ## Installation
 
 ```Git
-git clone https://github.com/shohart/TicTakToe.git
+git clone --no-checkout https://github.com/shohart/ shohart
+cd shohart
+git sparse-checkout init --cone
+git sparse-checkout set UDEMY-python-projects/project_1_tic_tak_toe_game
+
 ```
 
 ## Libraries
