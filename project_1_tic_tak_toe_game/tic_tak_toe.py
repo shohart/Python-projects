@@ -17,36 +17,51 @@ import datetime as dt
 # Defining functions
 
 
-def game_board(board):
-    # Drawing a game board
+def game_board(board_list):
+    """Draws a game board based on a list of lists"""
     print()
-    print(board)
+    print(board_list)
 
 
 def user_pic():
+    """This function prompts the user to select either an 'X' or an 'O'
+    and returns the choice as a tuple with the player 1's choice first and
+    player 2's choice second.
+    """
+
     # Pick a side X or O
+    p_1 = '_'
+    p_2 = '_'
 
-    player1 = '_'
-    player2 = '_'
-
-    while player1 not in 'XO':
-        player1 = input('Player 1! Pick a side! X or O? ').upper()
-        if player1 not in 'XO':
+    while p_1 not in 'XO':
+        p_1 = input('Player 1! Pick a side! X or O? ').upper()
+        if p_1 not in 'XO':
             print('\n'*100)
             print('Sorry, you need to enter X or O!')
 
-    if player1 == 'X':
-        player2 = 'O'
+    if p_1 == 'X':
+        p_2 = 'O'
     else:
-        player2 = 'X'
+        p_2 = 'X'
 
-    return player1, player2
+    return p_1, p_2
 
 
 def user_choice():
-    # Defining user position choice
+    """Define the users choice for a position
 
-    choice = 'WRONG'
+    This function takes in a user's input and checks whether it is a digit
+    from 1 to 9 and if the position is empty. If not, it will prompt the user
+    to enter a valid position.
+
+    Args:
+        None
+
+    Return:
+        int: the position index selected by the user
+    """
+
+    choice = '_'
 
     while not choice.isdigit() or \
         int(choice) not in range(1, 10) or \
@@ -67,42 +82,53 @@ def user_choice():
 
 
 def continue_game():
-    # Define game continue or not
+    """
+    Defines if the game should continue or not based on an input from the user.
 
-    go_game = 'empty value'
+    Parameters:
+        None
+
+    Returns:
+        bool: True if the user entered yes, False otherwise
+    """
+    go_game = '_'
 
     while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
-
         go_game = input('Continue? Enter Yes or No: ')
-
         if go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
             print('\n'*100)
             print("Sorry, I didn't understand.\n"
                   "Please make sure to enter Yes or No.")
 
-    if go_game.capitalize() in ['Yes', 'Y']:
-        # Game is still on
-        return True
-
-    else:
-        # Game is over
-        return False
+    return bool(go_game.capitalize() in ['Yes', 'Y'])
 
 
-def board_replace(dictionary, position):
-    # Making changes in the board according to a choice
+def board_replace(dictionary, place):
+    """Makes changes in the board according to a choice
 
+    Args:
+        dictionary (dict): A dictionary representing a board state
+        place (int): An index in the dictionary to change
+
+    Returns:
+        dict: The updated board state
+    """
     if turn % 2 != 0:
-        dictionary[position] = player1
+        dictionary[place] = player1
 
     else:
-        dictionary[position] = player2
+        dictionary[place] = player2
 
     return dictionary
 
 
 def check_win():
-    # Checking rows for winner
+    """
+    This function checks for a winner in the game by checking all
+    the possible winning combinations of the tic-tac-toe board.
+    It returns either 'Player 1', 'Player 2' or 'nobody'
+    depending on the outcome of the board.
+    """
 
     if pos[7] == pos[8] == pos[9] == player1 or \
        pos[4] == pos[5] == pos[6] == player1 or \
@@ -136,23 +162,40 @@ def check_win():
 
 
 def choose_first():
-    # Choose who goes first on a game
+    """Returns a random integer between 1 and 2 to decide which player
+    goes first.
+
+    Parameters:
+        None
+
+    Returns:
+        int: A random integer between 1 and 2
+    """
     return random.randint(1, 2)
 
 
 def reset_board():
-    # Set all the values to default
+    """Resets the game board and all related values to the default.
 
-    win = 'nobody'
+    Parameters:
+        None
 
-    pos = [
+    Returns:
+        def_winner: String 'nobody'
+        def_board_list: A list of 9 strings representing the board positions
+        def_board: String representing a 3x3 board
+        def_turn: An integer between 1 and 2
+    """
+    def_winner = 'nobody'
+
+    def_board_list = [
         'not_used',
         ' ', ' ', ' ',
         ' ', ' ', ' ',
         ' ', ' ', ' '
     ]
 
-    board = (
+    def_board = (
 
         f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
         '---|---|---\n'
@@ -162,19 +205,33 @@ def reset_board():
 
     )
 
-    turn = choose_first()
+    def_turn = choose_first()
 
-    return win, pos, board, turn
+    return def_winner, def_board_list, def_board, def_turn
 
 
 def board_full_check():
-    # Check if the board is full or not
+    """Checks if the board is full or not.
+
+    Parameters:
+        None
+
+    Returns:
+        boolean: True if no empty space is found, False if empty space
+        is found.
+    """
     return ' ' not in pos
 
 
 def proceed():
-    # Define actual start of the game
+    """Asks the players to start the game.
 
+    Parameters:
+        None
+
+    Returns:
+        boolean: True if the players decide to start the game, False if not.
+    """
     go_game = 'empty value'
 
     while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
@@ -185,16 +242,18 @@ def proceed():
             print("Sorry, I didn't understand.\n"
                   "Please make sure to enter Yes or No.")
 
-    if go_game.capitalize() in ['Yes', 'Y']:
-        # Game is still on
-        return True
-
-    else:
-        # Game is over
-        return False
+    return bool(go_game.capitalize() in ['Yes', 'Y'])
 
 
 def game_over():
+    """Prints the game over screen with the final scores.
+
+    Parameters:
+        None
+
+    Returns:
+        None
+    """
     print('\n'*100)
     print("| {0:=^19} |".format(' GAME OVER '))
     print("| {0:^19} |".format(' '))
@@ -207,8 +266,20 @@ def game_over():
 
 
 def log_score(name, score):
-    # Write game scores to file
+    """
+    Writes a game score to the scores.txt file.
 
+    Parameters
+    ----------
+    name : str
+        The name of the player
+    score : int
+        The score of the player
+
+    Returns
+    -------
+    None
+    """
     filename = 'scores.txt'
 
     if os.path.exists(filename):
@@ -216,13 +287,20 @@ def log_score(name, score):
     else:
         append_write = 'w'  # make a new file if not
 
-    with open(filename, append_write) as score_file:
+    with open(filename, append_write, encoding='utf8') as score_file:
         score_file.write(str(dt.date.today()) + ',' +
                          name + ',' + str(score) + '\n')
 
 
 def set_names():
-    # Ask players names
+    """ Ask players for their names and returns them as a tuple
+
+    Args:
+        None
+
+    Returns:
+        Tuple containing player names
+    """
 
     name1 = input('Player 1 enter your name: ')
     name2 = input('Player 2 enter your name: ')

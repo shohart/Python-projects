@@ -1,22 +1,42 @@
 import random
 
 
-suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
+suits = ("Hearts", "Diamonds", "Spades", "Clubs")
 ranks = (
-    'Two', 'Three', 'Four', 'Five', 'Six',
-    'Seven', 'Eight', 'Nine', 'Ten', 'Jack',
-    'Queen', 'King', 'Ace'
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Jack",
+    "Queen",
+    "King",
+    "Ace",
 )
 values = {
-    'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6,
-    'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10, 'Jack': 11,
-    'Queen': 12, 'King': 13, 'Ace': 14
+    "Two": 2,
+    "Three": 3,
+    "Four": 4,
+    "Five": 5,
+    "Six": 6,
+    "Seven": 7,
+    "Eight": 8,
+    "Nine": 9,
+    "Ten": 10,
+    "Jack": 11,
+    "Queen": 12,
+    "King": 13,
+    "Ace": 14,
 }
 
 # Create card class
 
 
-class Card():
+class Card:
     """
     This class represents a playing card.
 
@@ -43,10 +63,10 @@ class Card():
         return self.rank + " of " + self.suit
 
 
-class Deck():
+class Deck:
     """
     This class creates a Deck object which has two methods:
-    shuffle() which shuffles the deck and deal_one() which deals one card 
+    shuffle() which shuffles the deck and deal_one() which deals one card
     from the deck.
     The Deck object is initialized with a list of all the cards.
     """
@@ -62,13 +82,13 @@ class Deck():
 
     def shuffle(self):
         random.shuffle(self.all_cards)
-        print('Deck has been shuffled!')
+        print("Deck has been shuffled!")
 
     def deal_one(self):
         return self.all_cards.pop()
 
 
-class Player():
+class Player:
     """
     This class represents a Player in a game.
 
@@ -79,10 +99,10 @@ class Player():
     It has the following methods:
 
     remove_one(): Removes and returns the first card in the player's hand
-    add_cards(): Takes a new card or list of cards and adds them to the 
+    add_cards(): Takes a new card or list of cards and adds them to the
     player's hand
     shuffle(): Shuffles the player's cards
-    str(): Returns a string representation of the player and the number 
+    str(): Returns a string representation of the player and the number
     of cards in their hand
     """
 
@@ -103,13 +123,13 @@ class Player():
         random.shuffle(self.all_cards)
 
     def __str__(self):
-        return f'Player {self.name} has {len(self.all_cards)} cards.'
+        return f"Player {self.name} has {len(self.all_cards)} cards."
 
 
 # game setup
 
-player_one = Player('one')
-player_two = Player('two')
+player_one = Player("one")
+player_two = Player("two")
 
 new_deck = Deck()
 new_deck.shuffle()
@@ -127,21 +147,16 @@ round_num = 0
 # game loops
 
 while game_on:
-    """Runs the game loop while the game is still on.
 
-    Increments the round number and checks if either player is out of cards.
-    If so, ends the loop and prints out the winner. Otherwise, continues 
-    the game loop.
-    """
     round_num += 1
-    print(f'Round {round_num}')
+    print(f"Round {round_num}")
 
     if len(player_one.all_cards) == 0:
-        print('Player One, out of cards! Player Two wins!')
+        print("Player One, out of cards! Player Two wins!")
         game_on = False
         break
     if len(player_two.all_cards) == 0:
-        print('Player Two, out of cards! Player One wins!')
+        print("Player Two, out of cards! Player One wins!")
         game_on = False
         break
 
@@ -153,16 +168,11 @@ while game_on:
     player_two.shuffle()
     player_two_cards.append(player_two.remove_one())
 
-# while at war
+    # while at war
 
     at_war = True
     while at_war:
-        """Runs the game loop while the players are at war.
 
-        Checks the values of the cards and adds them to the winner's 
-        hand. If the values are the same, continues the loop until 
-        either player runs out of cards.
-        """
         if player_one_cards[-1].value > player_two_cards[-1].value:
             player_one.add_cards(player_one_cards)
             player_one.add_cards(player_two_cards)
@@ -176,17 +186,17 @@ while game_on:
             at_war = False
 
         else:
-            print('WAR!')
+            print("WAR!")
 
             if len(player_one.all_cards) < 5:
-                print('Player One unable to declare a war!')
-                print('Player Two wins!')
+                print("Player One unable to declare a war!")
+                print("Player Two wins!")
                 game_on = False
                 break
 
             elif len(player_two.all_cards) < 5:
-                print('Player Two unable to declare a war!')
-                print('Player One wins!')
+                print("Player Two unable to declare a war!")
+                print("Player One wins!")
                 game_on = False
                 break
 
