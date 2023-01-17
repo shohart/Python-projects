@@ -442,6 +442,7 @@ while game_on:
         player.add_funds()
         time.sleep(2)
 
+    # Check if shoe is empty
     while game_start and game_on and dealer.shoe_left >= 4:
         if dealer.shoe_left < 4:
             print("No cards left in the shoe!")
