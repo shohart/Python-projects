@@ -30,19 +30,19 @@ def user_pic():
     """
 
     # Pick a side X or O
-    p_1 = '_'
-    p_2 = '_'
+    p_1 = "_"
+    p_2 = "_"
 
-    while p_1 not in 'XO':
-        p_1 = input('Player 1! Pick a side! X or O? ').upper()
-        if p_1 not in 'XO':
-            print('\n'*100)
-            print('Sorry, you need to enter X or O!')
+    while p_1 not in "XO":
+        p_1 = input("Player 1! Pick a side! X or O? ").upper()
+        if p_1 not in "XO":
+            print("\n" * 100)
+            print("Sorry, you need to enter X or O!")
 
-    if p_1 == 'X':
-        p_2 = 'O'
+    if p_1 == "X":
+        p_2 = "O"
     else:
-        p_2 = 'X'
+        p_2 = "X"
 
     return p_1, p_2
 
@@ -61,22 +61,23 @@ def user_choice():
         int: the position index selected by the user
     """
 
-    choice = '_'
+    choice = "_"
 
-    while not choice.isdigit() or \
-        int(choice) not in range(1, 10) or \
-            pos[int(choice)] != ' ':
+    while (
+        not choice.isdigit()
+        or int(choice) not in range(1, 10)
+        or pos[int(choice)] != " "
+    ):
 
-        choice = input('Select a position index (1-9): ')
+        choice = input("Select a position index (1-9): ")
 
         if not choice.isdigit():
             print("Sorry that is not a digit! Please enter 1-9!")
 
         elif int(choice) not in range(1, 10):
-            print('Sorry that is not a correct position value! '
-                  'Please enter 1-9!')
-        elif pos[int(choice)] != ' ':
-            print('Sorry this spot was already taken!')
+            print("Sorry that is not a correct position value! " "Please enter 1-9!")
+        elif pos[int(choice)] != " ":
+            print("Sorry this spot was already taken!")
 
     return int(choice)
 
@@ -91,16 +92,17 @@ def continue_game():
     Returns:
         bool: True if the user entered yes, False otherwise
     """
-    go_game = '_'
+    go_game = "_"
 
-    while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
-        go_game = input('Continue? Enter Yes or No: ')
-        if go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
-            print('\n'*100)
-            print("Sorry, I didn't understand.\n"
-                  "Please make sure to enter Yes or No.")
+    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+        go_game = input("Continue? Enter Yes or No: ")
+        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+            print("\n" * 100)
+            print(
+                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
+            )
 
-    return bool(go_game.capitalize() in ['Yes', 'Y'])
+    return bool(go_game.capitalize() in ["Yes", "Y"])
 
 
 def board_replace(dictionary, place):
@@ -130,35 +132,35 @@ def check_win():
     depending on the outcome of the board.
     """
 
-    if pos[7] == pos[8] == pos[9] == player1 or \
-       pos[4] == pos[5] == pos[6] == player1 or \
-       pos[1] == pos[2] == pos[3] == player1 or \
-                                     \
-       pos[1] == pos[4] == pos[7] == player1 or \
-       pos[2] == pos[5] == pos[8] == player1 or \
-       pos[3] == pos[6] == pos[9] == player1 or \
-                                     \
-       pos[7] == pos[5] == pos[3] == player1 or \
-       pos[1] == pos[5] == pos[9] == player1:
+    if (
+        pos[7] == pos[8] == pos[9] == player1
+        or pos[4] == pos[5] == pos[6] == player1
+        or pos[1] == pos[2] == pos[3] == player1
+        or pos[1] == pos[4] == pos[7] == player1
+        or pos[2] == pos[5] == pos[8] == player1
+        or pos[3] == pos[6] == pos[9] == player1
+        or pos[7] == pos[5] == pos[3] == player1
+        or pos[1] == pos[5] == pos[9] == player1
+    ):
 
-        return 'Player 1'
+        return "Player 1"
 
-    elif pos[7] == pos[8] == pos[9] == player2 or \
-            pos[4] == pos[5] == pos[6] == player2 or \
-            pos[1] == pos[2] == pos[3] == player2 or \
-                                         \
-            pos[1] == pos[4] == pos[7] == player2 or \
-            pos[2] == pos[5] == pos[8] == player2 or \
-            pos[3] == pos[6] == pos[9] == player2 or \
-                                         \
-            pos[7] == pos[5] == pos[3] == player2 or \
-            pos[1] == pos[5] == pos[9] == player2:
+    elif (
+        pos[7] == pos[8] == pos[9] == player2
+        or pos[4] == pos[5] == pos[6] == player2
+        or pos[1] == pos[2] == pos[3] == player2
+        or pos[1] == pos[4] == pos[7] == player2
+        or pos[2] == pos[5] == pos[8] == player2
+        or pos[3] == pos[6] == pos[9] == player2
+        or pos[7] == pos[5] == pos[3] == player2
+        or pos[1] == pos[5] == pos[9] == player2
+    ):
 
-        return 'Player 2'
+        return "Player 2"
 
     else:
 
-        return 'nobody'
+        return "nobody"
 
 
 def choose_first():
@@ -186,23 +188,16 @@ def reset_board():
         def_board: String representing a 3x3 board
         def_turn: An integer between 1 and 2
     """
-    def_winner = 'nobody'
+    def_winner = "nobody"
 
-    def_board_list = [
-        'not_used',
-        ' ', ' ', ' ',
-        ' ', ' ', ' ',
-        ' ', ' ', ' '
-    ]
+    def_board_list = ["not_used", " ", " ", " ", " ", " ", " ", " ", " ", " "]
 
     def_board = (
-
-        f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
-        '---|---|---\n'
-        f'  {pos[4]} | {pos[5]} | {pos[6]} \n '
-        '---|---|---\n'
-        f'  {pos[1]} | {pos[2]} | {pos[3]} \n'
-
+        f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
+        "---|---|---\n"
+        f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
+        "---|---|---\n"
+        f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
     )
 
     def_turn = choose_first()
@@ -220,7 +215,7 @@ def board_full_check():
         boolean: True if no empty space is found, False if empty space
         is found.
     """
-    return ' ' not in pos
+    return " " not in pos
 
 
 def proceed():
@@ -232,17 +227,18 @@ def proceed():
     Returns:
         boolean: True if the players decide to start the game, False if not.
     """
-    go_game = 'empty value'
+    go_game = "empty value"
 
-    while go_game.capitalize() not in ['Yes', 'No', 'Y', 'N']:
+    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
 
-        go_game = input('Start the game? Enter Yes or No: ')
+        go_game = input("Start the game? Enter Yes or No: ")
 
-        if go_game.capitalize() not in ['Yes', 'No']:
-            print("Sorry, I didn't understand.\n"
-                  "Please make sure to enter Yes or No.")
+        if go_game.capitalize() not in ["Yes", "No"]:
+            print(
+                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
+            )
 
-    return bool(go_game.capitalize() in ['Yes', 'Y'])
+    return bool(go_game.capitalize() in ["Yes", "Y"])
 
 
 def game_over():
@@ -254,15 +250,13 @@ def game_over():
     Returns:
         None
     """
-    print('\n'*100)
-    print("| {0:=^19} |".format(' GAME OVER '))
-    print("| {0:^19} |".format(' '))
-    print("| {0:-^19} |".format(' Score: '))
-    print("| {0:^8} | {1:^8} |".format(names_data['Player 1'],
-                                       names_data['Player 2']))
-    print("| {0:^8} | {1:^8} |".format(wins_data['Player 1'],
-                                       wins_data['Player 2']))
-    print('\n')
+    print("\n" * 100)
+    print("| {0:=^19} |".format(" GAME OVER "))
+    print("| {0:^19} |".format(" "))
+    print("| {0:-^19} |".format(" Score: "))
+    print("| {0:^8} | {1:^8} |".format(names_data["Player 1"], names_data["Player 2"]))
+    print("| {0:^8} | {1:^8} |".format(wins_data["Player 1"], wins_data["Player 2"]))
+    print("\n")
 
 
 def log_score(name, score):
@@ -280,20 +274,19 @@ def log_score(name, score):
     -------
     None
     """
-    filename = 'scores.txt'
+    filename = "scores.txt"
 
     if os.path.exists(filename):
-        append_write = 'a'  # append if already exists
+        append_write = "a"  # append if already exists
     else:
-        append_write = 'w'  # make a new file if not
+        append_write = "w"  # make a new file if not
 
-    with open(filename, append_write, encoding='utf8') as score_file:
-        score_file.write(str(dt.date.today()) + ',' +
-                         name + ',' + str(score) + '\n')
+    with open(filename, append_write, encoding="utf8") as score_file:
+        score_file.write(str(dt.date.today()) + "," + name + "," + str(score) + "\n")
 
 
 def set_names():
-    """ Ask players for their names and returns them as a tuple
+    """Ask players for their names and returns them as a tuple
 
     Args:
         None
@@ -302,62 +295,58 @@ def set_names():
         Tuple containing player names
     """
 
-    name1 = input('Player 1 enter your name: ')
-    name2 = input('Player 2 enter your name: ')
+    name1 = input("Player 1 enter your name: ")
+    name2 = input("Player 2 enter your name: ")
 
     return name1, name2
 
 
 # Clear any historical output and show the game list
-print('\n'*100)
+print("\n" * 100)
 
 # Defining rows of a board
-pos = ['not_used',
-       '1', '2', '3',
-       '4', '5', '6',
-       '7', '8', '9'
-       ]
+pos = ["not_used", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # Defining board itself
 board = (
-
-    f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
-    '---|---|---\n'
-    f'  {pos[4]} | {pos[5]} | {pos[6]} \n '
-    '---|---|---\n'
-    f'  {pos[1]} | {pos[2]} | {pos[3]} \n'
-
+    f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
+    "---|---|---\n"
+    f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
+    "---|---|---\n"
+    f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
 )
 
 
 # Setting initial service variables
 game_on = True
-player1 = 'Empty'
-player2 = 'Empty'
-win = 'nobody'
+player1 = "Empty"
+player2 = "Empty"
+win = "nobody"
 board_full = False
 
 # Storing total wins data
-wins_data = {'Player 1': 0, 'Player 2': 0}
+wins_data = {"Player 1": 0, "Player 2": 0}
 
 # Storing player names
-names_data = {'Player 1': 'Unknown', 'Player 2': 'Unknown'}
+names_data = {"Player 1": "Unknown", "Player 2": "Unknown"}
 
 # Printing Welcome message
-print('\n'*100)
-print('Welcome to the Tic Tak Toe game! '
-      'You pick the spot by index.\n'
-      'Here is the board indexes:\n')
+print("\n" * 100)
+print(
+    "Welcome to the Tic Tak Toe game! "
+    "You pick the spot by index.\n"
+    "Here is the board indexes:\n"
+)
 print(board)
 
 # Ask for player names
-names_data['Player 1'], names_data['Player 2'] = set_names()
+names_data["Player 1"], names_data["Player 2"] = set_names()
 
 # Choose a marker for players
 player1, player2 = user_pic()
 
 # Clear output
-print('\n'*100)
+print("\n" * 100)
 
 game_start = True
 
@@ -370,21 +359,21 @@ while game_on and game_start:
     game_start = True
 
     # Clear any historical output and show the game list
-    print('\n'*100)
+    print("\n" * 100)
 
     # Printing info
     print(f"Player 1 = {names_data['Player 1']} = {player1}")
     print(f"Player 2 = {names_data['Player 2']} = {player2}")
-    print(f'Player {turn} goes first!\n')
+    print(f"Player {turn} goes first!\n")
 
     # Promt to start the game
     game_start = proceed()
 
     # Turn cycle
-    while win == 'nobody' and not board_full:
+    while win == "nobody" and not board_full:
 
         # Clear any historical output and show the game list
-        print('\n'*100)
+        print("\n" * 100)
 
         # Draw a board
         game_board(board)
@@ -403,13 +392,11 @@ while game_on and game_start:
 
         # Update the board
         board = (
-
-            f'  {pos[7]} | {pos[8]} | {pos[9]} \n '
-            '---|---|---\n'
-            f'  {pos[4]} | {pos[5]} | {pos[6]} \n '
-            '---|---|---\n'
-            f'  {pos[1]} | {pos[2]} | {pos[3]} \n'
-
+            f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
+            "---|---|---\n"
+            f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
+            "---|---|---\n"
+            f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
         )
 
         # Show the updated game board
@@ -419,9 +406,9 @@ while game_on and game_start:
         win = check_win()
 
         # Actions if win accurse
-        if win != 'nobody':
-            print('\n'*100)
-            print(f'{names_data[win]} won!\n')
+        if win != "nobody":
+            print("\n" * 100)
+            print(f"{names_data[win]} won!\n")
             wins_data[win] += 1
             print(board)
 
@@ -429,9 +416,9 @@ while game_on and game_start:
         board_full = board_full_check()
 
         # Checking for a full board and no win
-        if board_full and win == 'nobody':
-            print('\n'*100)
-            print('No free spots left on a board! It seems to be a tie!\n')
+        if board_full and win == "nobody":
+            print("\n" * 100)
+            print("No free spots left on a board! It seems to be a tie!\n")
             print(board)
 
         # Adding to a turn counter
@@ -443,5 +430,5 @@ while game_on and game_start:
     # Displaying final game scores
     if not game_on:
         game_over()
-        log_score(names_data['Player 1'], wins_data['Player 1'])
-        log_score(names_data['Player 2'], wins_data['Player 2'])
+        log_score(names_data["Player 1"], wins_data["Player 1"])
+        log_score(names_data["Player 2"], wins_data["Player 2"])
