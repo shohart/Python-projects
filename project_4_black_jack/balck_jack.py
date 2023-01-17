@@ -402,7 +402,7 @@ class Dealer:
 game_start = True
 game_on = True
 
-
+# Main game cycle
 while game_on:
 
     # Display intro screen
