@@ -375,7 +375,7 @@ class Player:
     """
 
     def __init__(self):
-        self.name = input("Enter your name: ")
+        self.name = input("Enter your name to proceed: ")
         self.hand = Hand()
         self.chips = Chips(self.name)
         self.rounds_won = 0
@@ -451,16 +451,21 @@ class Dealer:
         return f"There are {len(self.shoe)} cards in the shoe."
 
 
+# Clean output
+print("\n" * 100)
+
 # initial variables
 game_start = True
 game_on = True
+player = Player()
 
 # Main game cycle
-while game_on:
+while True:
 
     # Display intro screen
     print("\n" * 100)
     art.tprint("BlackJack", font="speed")
+    print(f"\nHello {player.name}!\n")
     print(
         "Rules:\n"
         " * The goal of blackjack is to beat the dealer's hand\n"
@@ -476,12 +481,12 @@ while game_on:
     )
 
     game_start = game_on = proceed()
+    if not game_on:
+        break
 
     # Initiate class instances
     dealer = Dealer()
-    player = Player()
 
-    print(f"\nHello {player.name}!")
     print(f"\nThere are {dealer.shoe_left} cards in the shoe!")
     time.sleep(3)
 
@@ -646,3 +651,5 @@ while game_on:
 
     # Ask for continue
     game_on = continue_game()
+    if not game_on:
+        break
