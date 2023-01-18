@@ -32,13 +32,13 @@ Welcome to this Black Jack game! This game is a student project written in Pytho
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-## 1. <a name='Features'></a>Features
+## <a name='Features'></a>Features
 
 - Draws graphical representation of cards in the console
 - Logs bet, win and deposit chips history to a file 'scores.txt'
 - Logs overall scores to a filename '{playername}\_statement.txt'
 
-## 2. <a name='Classes'></a>Classes
+## <a name='Classes'></a>Classes
 
 ### 2.1. <a name='Card'></a>Card
 
