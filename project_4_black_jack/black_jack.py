@@ -26,12 +26,17 @@ values = {
 
 
 def continue_game():
-    # Define game continue or not
+    """
+    Function to ask the user if they would like to continue playing the game
 
+    Returns
+    -------
+    bool
+        True if the user answered yes, False if the user answered no
+    """
     go_game = "empty value"
 
     while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
-
         go_game = input("Continue? Enter Yes or No: ")
 
         if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
@@ -67,6 +72,12 @@ def proceed():
 
 
 def print_hands(dl, pl):
+    """Prints the current hands of the dealer and player.
+
+    Parameters:
+    dl (Dealer): The dealer object
+    pl (Player): The player object
+    """
     print("\n" * 100)
     print(f"Dealer: {dl.hand.value}")
     for i in range(5):
@@ -221,6 +232,9 @@ class Deck:
                 self.all_cards.append(created_card)
 
     def shuffle(self):
+        """
+        Shuffle a deck.
+        """
         random.shuffle(self.all_cards)
         print("Deck has been shuffled!")
 
@@ -229,14 +243,31 @@ class Deck:
 
 
 class Hand:
+    """
+    Represents a hand of cards in a card game.
+
+    Attributes:
+        cards (list): A list of individual cards held in the hand.
+        value (int): The numerical value of the hand.
+    """
+
     def __init__(self):
         self.cards = []
         self.value = 0
 
-    def add(self, new_cards):
-        self.cards.append(new_cards)
+    def add(self, card):
+        """
+        Add cards to hand.
+
+        Args:
+            card (card): card to be added
+        """
+        self.cards.append(card)
 
     def check(self):
+        """
+        Count total value of cards in hand, according to black jack rules.
+        """
         aces = []
         rest = []
 
@@ -264,7 +295,17 @@ class Hand:
 
 
 class Chips:
+    """
+    A class for managing chips
+    """
+
     def __init__(self, player):
+        """
+        Initialize a Chips object
+
+        Parameters:
+            player (str): The name of the player
+        """
         self.bank = 0
         self.history = []
         self.deposit = 0
@@ -272,7 +313,9 @@ class Chips:
         self.player_name = player
 
     def add_funds(self):
-
+        """
+        Add funds to the player's bank
+        """
         amount = "_"
 
         while not amount.isdigit() and amount != "0":
@@ -289,7 +332,9 @@ class Chips:
         print(f"\n{amount} just added to your bank.\nYour bank: {self.bank}")
 
     def bet(self):
-
+        """
+        Place a bet with the player's funds
+        """
         amount = "_"
 
         while True:
@@ -315,25 +360,18 @@ class Chips:
         return int(amount)
 
     def __str__(self):
+        """
+        Represent the Chips object as a string with the player's balance
+        """
         return f"Player's balance: {self.bank}"
 
 
 class Player:
     """
-    This class represents a Player in a game.
+    This class represents a player in the game.
 
-    It has the following attributes:
-
-    name: The name of the player
-    all_cards: A list of all the cards in the player's hand
-    It has the following methods:
-
-    remove_one(): Removes and returns the first card in the player's hand
-    add_cards(): Takes a new card or list of cards and adds them to the
-    player's hand
-    shuffle(): Shuffles the player's cards
-    str(): Returns a string representation of the player and the number
-    of cards in their hand
+    It holds information about the player's name,
+    hand, chips, rounds won and box score.
     """
 
     def __init__(self):
@@ -344,6 +382,9 @@ class Player:
         self.box = 0
 
     def hit(self):
+        """
+        This method gets the player's decision to either stand or hit.
+        """
 
         move = "_"
 
@@ -358,6 +399,9 @@ class Player:
         return bool(move in ["hit", "h"])
 
     def reset(self):
+        """
+        This method resets the player's box score and hand.
+        """
         self.box = 0
         self.hand.reset()
 
@@ -369,12 +413,24 @@ class Player:
 
 
 class Dealer:
+    """
+    A class representing a blackjack dealer.
+
+    Attributes:
+        hand (Hand): The dealer's current hand.
+        shoe (Deck): The shoe from which the dealer draws cards.
+        shoe_left (int): The number of cards left in the shoe.
+    """
+
     def __init__(self):
         self.hand = Hand()
         self.shoe = Deck()
         self.shoe_left = len(self.shoe.all_cards)
 
     def deal_one(self):
+        """
+        Draw one card from the shoe.
+        """
         if self.shoe_left != 0:
             self.shoe_left -= 1
             return self.shoe.all_cards.pop(0)
@@ -383,9 +439,15 @@ class Dealer:
             pass
 
     def reset(self):
+        """
+        Reset the dealer's hand.
+        """
         self.hand.reset()
 
     def __str__(self):
+        """
+        Return a string representation of the dealer.
+        """
         return f"There are {len(self.shoe)} cards in the shoe."
 
 
