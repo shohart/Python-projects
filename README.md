@@ -15,3 +15,9 @@ The game is played between two players and requires a standard 52-card deck. The
 [Project 3: Guess the Number](https://github.com/shohart/UDEMY-python-projects/tree/master/project_3_guess_the_number)
 
 This game is used to find a random number in a minimum number of tries possible. To play, the computer generates a random integer between 1 and 100, and the user has to guess what number it is.
+
+[Project 4: Black Jack Game](https://github.com/shohart/UDEMY-python-projects/tree/master/project_4_black_jack)
+
+This game is a student project written in Python for an online course on Udemy.com. This game utilizes classes and functions to create a full-fledged Black Jack game.
+
+The goal of the game is to beat the dealer's hand without going over 21. In the game, face cards (Kings, Queens, and Jacks) are all worth 10 and Aces can be worth 1 or 11.
