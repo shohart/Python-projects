@@ -6,16 +6,16 @@ Welcome to this Black Jack game! This game is a student project written in Pytho
 
 <!-- vscode-markdown-toc -->
 
-- 1 [Features](#Features)
-- 2 [Classes](#Classes)
-  - 2.1 [Card](#Card)
-  - 2.2. [Deck](#Deck)
-  - 2.3. [Hand](#Hand)
-  - 2.4. [Chips](#Chips)
-  - 2.5. [Player](#Player)
-  - 2.6. [Methods](#Methods-1)
-  - 2.7. [Dealer](#Dealer)
-- 3. [Functions](#Functions)
+- 1 [Features](#1.-Features)
+- 2 [Classes](#2.-Classes)
+  - 2.1 [Card](#2.1-Card)
+  - 2.2. [Deck](#2.2-Deck)
+  - 2.3. [Hand](#2.3-Hand)
+  - 2.4. [Chips](#2.4-Chips)
+  - 2.5. [Player](#2.5-Player)
+  - 2.6. [Methods](#2.6-Methods-1)
+  - 2.7. [Dealer](#2.7-Dealer)
+- 3. [Functions](#3.-Functions)
   - 3.1. [continue_game()](#continue_game)
   - 3.2. [proceed()](#proceed)
   - 3.3. [print_hands(dl, pl)](#print_handsdlpl)
@@ -32,13 +32,13 @@ Welcome to this Black Jack game! This game is a student project written in Pytho
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-## <a name='Features'></a>Features
+## 1. <a name='Features'></a>Features
 
 - Draws graphical representation of cards in the console
 - Logs bet, win and deposit chips history to a file 'scores.txt'
 - Logs overall scores to a filename '{playername}\_statement.txt'
 
-## <a name='Classes'></a>Classes
+## 2. <a name='Classes'></a>Classes
 
 ### 2.1. <a name='Card'></a>Card
 
