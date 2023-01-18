@@ -2,55 +2,29 @@
 
 ![Cards](https://samsfun.ru/assets/images/content/Blackjack/en/black-jack-strategien.jpg)
 
+[[TOC]]
+
 Welcome to this Black Jack game! This game is a student project written in Python for an online course on Udemy.com. This game utilizes classes and functions to create a full-fledged Black Jack game.
 
-<!-- vscode-markdown-toc -->
-
-- 1 [Features](#1.-Features)
-- 2 [Classes](#2.-Classes)
-  - 2.1 [Card](#2.1-Card)
-  - 2.2. [Deck](#2.2-Deck)
-  - 2.3. [Hand](#2.3-Hand)
-  - 2.4. [Chips](#2.4-Chips)
-  - 2.5. [Player](#2.5-Player)
-  - 2.6. [Methods](#2.6-Methods-1)
-  - 2.7. [Dealer](#2.7-Dealer)
-- 3. [Functions](#3.-Functions)
-  - 3.1. [continue_game()](#continue_game)
-  - 3.2. [proceed()](#proceed)
-  - 3.3. [print_hands(dl, pl)](#print_handsdlpl)
-  - 3.4. [game_over(pl)](#game_overpl)
-  - 3.5. [statement(pl_name)](#statementpl_name)
-  - 3.6. [log_score()](#log_score)
-- 4. [Main Game Logic](#MainGameLogic)
-- 5. [Installation](#Installation)
-- 6. [Libraries](#Libraries)
-
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
-
-## 1. <a name='Features'></a>Features
+## 1. Features
 
 - Draws graphical representation of cards in the console
 - Logs bet, win and deposit chips history to a file 'scores.txt'
 - Logs overall scores to a filename '{playername}\_statement.txt'
 
-## 2. <a name='Classes'></a>Classes
+## 2. Classes
 
-### 2.1. <a name='Card'></a>Card
+### 2.1. Card
 
 This class represents a playing card.
 
-#### 2.1.1. <a name='Parameters'></a>Parameters
+#### 2.1.1.Parameters
 
 _suit (str):_ The suit of the card (e.g. "Hearts" or "Spades")
 
 _rank (str):_ The rank of the card (e.g. "Ace" or "King")
 
-#### 2.1.2. <a name='Attributes'></a>Attributes
+#### 2.1.2. Attributes
 
 _suit (str):_ The suit of the card (e.g. "Hearts" or "Spades")
 
@@ -58,13 +32,13 @@ _rank (str):_ The rank of the card (e.g. "Ace" or "King")
 
 _value (int):_ The numerical value of the card
 
-#### 2.1.3. <a name='Methods'></a>Methods
+#### 2.1.3. Methods
 
 _init():_ Initializes the playing card object
 
 _str():_ Returns the string representation of the card
 
-### 2.2. <a name='Deck'></a>Deck
+### 2.2. Deck
 
 This class creates a Deck object from Card objects, which has two methods: _shuffle()_,
 which shuffles the deck and _deal_one()_, which deals one card from the deck. The Deck object is initialized with a list of all the cards.
@@ -78,17 +52,17 @@ Shuffles a deck.
 **deal_one()**
 Deals one card from the Deck.
 
-### 2.3. <a name='Hand'></a>Hand
+### 2.3. Hand
 
 The Hand class is used to represent a hand of cards in a card game. Each instance of the class contains a list of individual cards held in the hand and a numerical value of the hand.
 
-#### 2.3.1. <a name='Attributes-1'></a>Attributes
+#### 2.3.1. Attributes
 
 - _cards(list):_ A list of individual cards held in the hand.
 
 - _value(int):_ The numerical value of the hand.
 
-#### 2.3.2. <a name='Methods-1'></a>Methods
+#### 2.3.2. Methods
 
 - _add()_ The add method is used to add a card to the hand.
 
@@ -100,15 +74,15 @@ The Hand class is used to represent a hand of cards in a card game. Each instanc
 
 - _str()_ This method is used to return a string representation of the hand, including the number of cards and the score.
 
-### 2.4. <a name='Chips'></a>Chips
+### 2.4. Chips
 
 The Chips class is used for managing chips for a player. It contains methods for adding funds to a player's bank, placing a bet, and representing the object as a string with the player's balance.
 
-#### 2.4.1. <a name='Initialization'></a>Initialization
+#### 2.4.1. Initialization
 
 The init method is used to initialize a Chips object. It takes one parameter, _player_, which is the name of the player. It also sets up the initial values of the player's bank, history, deposit, won, and player's name.
 
-#### 2.4.2. <a name='Methods-1'></a>Methods
+#### 2.4.2. Methods
 
 - _add_funds_ The _add_funds_
   method is used to add funds to the player's bank. It takes no parameters and returns nothing. It prompts the user to enter the amount they want to add, then adds it to the bank. It also updates the history and prints a confirmation message.
@@ -118,16 +92,16 @@ The init method is used to initialize a Chips object. It takes one parameter, _p
 - _str_ The _str_ method is used to
   represent the **Chips** object as a string with the player's balance. It takes no parameters and returns a string.
 
-### 2.5. <a name='Player'></a>Player
+### 2.5. Player
 
 This class represents a player in the game. It holds information about the player's name, hand, chips, rounds won and box score.
 
-#### 2.5.1. <a name='Initialization-1'></a>Initialization
+#### 2.5.1. Initialization
 
 At this piont class initializes the player's name, hand, chips, rounds won and box score. It also sets
 _self.name_ to an inputted name.
 
-### 2.6. <a name='Methods-1'></a>Methods
+### 2.6. Methods
 
 - _hit_ This method gets the player's decision to either stand or hit. It takes no arguments and returns
   _True_
@@ -139,11 +113,11 @@ _self.name_ to an inputted name.
 
 - _str_ This method returns a string representation of the player's name, number of cards in the hand and bank balance. It takes no arguments.
 
-### 2.7. <a name='Dealer'></a>Dealer
+### 2.7. Dealer
 
 The Dealer class is responsible for representing a blackjack dealer. It has three attributes and three methods.
 
-#### 2.7.1. <a name='Attributes-1'></a>Attributes
+#### 2.7.1. Attributes
 
 - _hand_:
   The dealer's current hand.
@@ -153,7 +127,7 @@ The Dealer class is responsible for representing a blackjack dealer. It has thre
 - _shoe_left_:
   The number of cards left in the shoe.
 
-#### 2.7.2. <a name='Initialization-1'></a>Initialization
+#### 2.7.2. Initialization
 
 At this point class initializes
 _hand_
@@ -163,7 +137,7 @@ attributes, as well as setting the
 _shoe_left_
 attribute to the number of cards in the _shoe_.
 
-#### 2.7.3. <a name='Methods-1'></a>Methods
+#### 2.7.3. Methods
 
 - _deal_one()_
   The
@@ -186,9 +160,9 @@ attribute to the number of cards in the _shoe_.
   str()
   method is responsible for returning a string representation of the dealer. It returns a string containing the number of cards in the shoe.
 
-## 3. <a name='Functions'></a>Functions
+## 3. Functions
 
-### 3.1. <a name='continue_game'></a>continue_game()
+### 3.1.continue_game()
 
 This function takes no parameters asks the user if they would like to continue playing the game.
 
@@ -202,7 +176,7 @@ This function takes no parameters asks the user if they would like to continue p
   _No_
   .
 
-### 3.2. <a name='proceed'></a>proceed()
+### 3.2. proceed()
 
 This function asks the players to start the game.
 
@@ -213,7 +187,7 @@ This function asks the players to start the game.
 - **Usage**
   The function takes no parameters and returns a boolean value. It displays a message asking the players to start the game. The players have to enter either "Yes" or "No" (or their abbreviations "Y" or "N") as an input. If the entered value is not valid, the function will display an error message stating that the value is not valid.
 
-### 3.3. <a name='print_handsdlpl'></a>print_hands(dl, pl)
+### 3.3. print_hands(dl, pl)
 
 This function prints the current hands of the dealer and player.
 
@@ -229,11 +203,11 @@ This function prints the current hands of the dealer and player.
 - **Output**
   of the function is a visual representation of the hands of the dealer and the player. The dealer's hand is printed first, followed by the player's hand. If the player but a bet in a box, the bet value is printed first before the hand.
 
-### 3.4. <a name='game_overpl'></a>game_over(pl)
+### 3.4. game_over(pl)
 
 This function prints the game over screen with the final scores. Parameter _pl_ points to a player.
 
-### 3.5. <a name='statementpl_name'></a>statement(pl_name)
+### 3.5. statement(pl_name)
 
 This function is used to write the players' statements to a
 _{pl_name}\_statement.txt_
@@ -271,7 +245,7 @@ list. For each item in the list, it adds the current date and time and the histo
 
 Finally, the file is closed.
 
-### 3.6. <a name='log_score'></a>log_score()
+### 3.6. log_score()
 
 This function writes a game score to the _scores.txt_ file.
 
@@ -281,7 +255,7 @@ This function writes a game score to the _scores.txt_ file.
 - **Returns**
   None
 
-## 4. <a name='MainGameLogic'></a>Main Game Logic
+## 4. Main Game Logic
 
 The goal of the game is to beat the dealer's hand without going over 21. In the game, face cards (Kings, Queens, and Jacks) are all worth 10 and Aces can be worth 1 or 11:
 
@@ -299,7 +273,7 @@ Once the hand values are finalized, the program will check who won the game and 
 
 Finally, the program will ask the player if they want to play again. If their bank is empty, they will be asked to add funds.
 
-## 5. <a name='Installation'></a>Installation
+## 5. Installation
 
 ```Git
 git clone --no-checkout https://github.com/shohart/ shohart
@@ -308,7 +282,7 @@ git sparse-checkout init --cone
 git sparse-checkout set UDEMY-python-projects/project_4_black_jack
 ```
 
-## 6. <a name='Libraries'></a>Libraries
+## 6. Libraries
 
 - random
 - time
