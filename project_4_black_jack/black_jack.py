@@ -68,9 +68,9 @@ def proceed():
 
 def print_hands(dl, pl):
     print("\n" * 100)
-    print(f"Dealer: {dl.hand_value}")
+    print(f"Dealer: {dl.hand.value}")
     for i in range(5):
-        row = " ".join(dl.hand[n].pic[i] for n in range(len(dl.hand)))
+        row = " ".join(dl.hand.cards[n].pic[i] for n in range(len(dl.hand.cards)))
         print(row)
 
     print("\n")
@@ -80,9 +80,9 @@ def print_hands(dl, pl):
         print("\n")
     print("\n")
 
-    print(f"Player: {pl.hand_value}")
+    print(f"Player: {pl.hand.value}")
     for i in range(5):
-        row = " ".join(pl.hand[n].pic[i] for n in range(len(pl.hand)))
+        row = " ".join(pl.hand.cards[n].pic[i] for n in range(len(pl.hand.cards)))
         print(row)
 
 
@@ -100,9 +100,9 @@ def game_over(pl):
     print("| See you, {0:^10} |".format(pl.name))
     print("| {0:-^19} |".format(" Score: "))
     print("| {0:<11} | {1:>5} |".format("Rounds won:", pl.rounds_won))
-    print("| {0:<11} | {1:>5} |".format("Money in:", pl.money_deposit))
-    print("| {0:<11} | {1:>5} |".format("Money out:", pl.bank))
-    print("| {0:<11} | {1:>5} |".format("BALANCE:", pl.bank - pl.money_deposit))
+    print("| {0:<11} | {1:>5} |".format("Money in:", pl.chips.deposit))
+    print("| {0:<11} | {1:>5} |".format("Money out:", pl.chips.bank))
+    print("| {0:<11} | {1:>5} |".format("BALANCE:", pl.chips.bank - pl.chips.deposit))
     print("\n")
 
 
@@ -128,7 +128,7 @@ def statement(pl_name):
         append_write = "w"  # make a new file if not
 
     with open(filename, append_write, encoding="utf8") as score_file:
-        for op in pl_name.history:
+        for op in pl_name.chips.history:
             score_file.write(now + "," + op + "\n")
 
 
@@ -162,9 +162,9 @@ def log_score(pl_name):
             + ","
             + str(pl_name.rounds_won)
             + ","
-            + str(pl_name.bank)
+            + str(pl_name.chips.bank)
             + ","
-            + str(pl_name.money_deposit)
+            + str(pl_name.chips.deposit)
             + "\n"
         )
 
@@ -228,6 +228,96 @@ class Deck:
         return self.all_cards.pop()
 
 
+class Hand:
+    def __init__(self):
+        self.cards = []
+        self.value = 0
+
+    def add(self, new_cards):
+        self.cards.append(new_cards)
+
+    def check(self):
+        aces = []
+        rest = []
+
+        for card in self.cards:
+            if card.rank == " A":
+                aces.append(card.value)
+            else:
+                rest.append(card.value)
+
+        total = sum(rest)
+        for ace in aces:
+            if total <= 10:
+                total += ace[0]
+            else:
+                total += ace[1]
+
+        self.value = total
+
+    def reset(self):
+        self.cards = []
+        self.value = 0
+
+    def __str__(self):
+        return f"Hand is {len(self.hand)} cards. Score: {self.value}"
+
+
+class Chips:
+    def __init__(self, player):
+        self.bank = 0
+        self.history = []
+        self.deposit = 0
+        self.won = 0
+        self.player_name = player
+
+    def add_funds(self):
+
+        amount = "_"
+
+        while not amount.isdigit() and amount != "0":
+            amount = input("\nHow much do you want to add? ")
+
+            if not amount.isdigit():
+                print("\nSorry that is not a digit! Please enter a valid digit!")
+                continue
+
+        self.bank += int(amount)
+        self.deposit += int(amount)
+
+        self.history.append(f"{self.player_name},ADD,{amount},deposit")
+        print(f"\n{amount} just added to your bank.\nYour bank: {self.bank}")
+
+    def bet(self):
+
+        amount = "_"
+
+        while True:
+            amount = input("\nPlace a bet! Enter the ammount: ")
+
+            if not amount.isdigit() or amount == "0":
+                print("\nSorry that is not a valid bet!")
+                continue
+
+            elif int(amount) > self.bank:
+                print("\nOops! You do not have so much money! Please reduce a bet!")
+                continue
+
+            else:
+                self.bank -= int(amount)
+                self.history.append(f"{self.player_name},REMOVE,{amount},bet")
+                print(
+                    f"\nA bet of {amount} was successfully placed.",
+                    f"Your bank: {self.bank}",
+                )
+                break
+
+        return int(amount)
+
+    def __str__(self):
+        return f"Player's balance: {self.bank}"
+
+
 class Player:
     """
     This class represents a Player in a game.
@@ -248,13 +338,9 @@ class Player:
 
     def __init__(self):
         self.name = input("Enter your name: ")
-        self.bank = 0
-        self.hand = []
-        self.history = []
-        self.hand_value = 0
+        self.hand = Hand()
+        self.chips = Chips(self.name)
         self.rounds_won = 0
-        self.money_deposit = 0
-        self.money_won = 0
         self.box = 0
 
     def hit(self):
@@ -271,88 +357,21 @@ class Player:
 
         return bool(move in ["hit", "h"])
 
-    def add_funds(self):
-
-        amount = "_"
-
-        while not amount.isdigit() and amount != "0":
-            amount = input("\nHow much do you want to add? ")
-
-            if not amount.isdigit():
-                print("\nSorry that is not a digit! Please enter a valid digit!")
-                continue
-
-        self.bank += int(amount)
-        self.money_deposit += int(amount)
-
-        self.history.append(f"{self.name},ADD,{amount},deposit")
-        print(f"\n{amount} just added to your bank.\nYour bank: {self.bank}")
-
-    def bet(self):
-
-        amount = "_"
-
-        while True:
-            amount = input("\nPlace a bet! Enter the ammount: ")
-
-            if not amount.isdigit() or amount == "0":
-                print("\nSorry that is not a valid bet!")
-                continue
-
-            elif int(amount) > self.bank:
-                print("\nOops! You do not have so much money! Please reduce a bet!")
-                continue
-
-            else:
-                self.bank -= int(amount)
-                self.history.append(f"{self.name},REMOVE,{amount},bet")
-                print(
-                    f"\nA bet of {amount} was successfully placed.",
-                    f"Your bank: {self.bank}",
-                )
-                break
-
-        return int(amount)
-
-    def add_cards(self, new_cards):
-        self.hand.append(new_cards)
-
-    def check_hand(self):
-        aces = []
-        rest = []
-
-        for card in self.hand:
-            if card.rank == " A":
-                aces.append(card.value)
-            else:
-                rest.append(card.value)
-
-        total = sum(rest)
-        for ace in aces:
-            if total <= 10:
-                total += ace[0]
-            else:
-                total += ace[1]
-
-        self.hand_value = total
-
     def reset(self):
-        self.hand = []
-        self.hand_value = 0
         self.box = 0
+        self.hand.reset()
 
     def __str__(self):
         return (
-            f"Player {self.name} has {len(self.hand)} cards."
-            + f"Player's balance: {self.bank}"
+            f"Player {self.name} has {len(self.hand.cards)} cards."
+            + f"Player's balance: {self.chips.bank}"
         )
 
 
 class Dealer:
-    def __init__(self, shoe):
-        self.hand = []
-        self.shoe = shoe
-        self.hand_value = 0
+    def __init__(self):
+        self.hand = Hand()
+        self.shoe = Deck()
         self.shoe_left = len(self.shoe.all_cards)
 
     def deal_one(self):
@@ -363,36 +382,8 @@ class Dealer:
         else:
             pass
 
-    def add_cards(self, new_cards):
-        self.hand.append(new_cards)
-
-    def shuffle(self):
-        random.shuffle(self.shoe.all_cards)
-        print("Deck has been shuffled by Dealer!")
-
-    def check_hand(self):
-        aces = []
-        rest = []
-
-        for card in self.hand:
-            if card.rank == " A":
-                aces.append(card.value)
-            else:
-                rest.append(card.value)
-
-        total = sum(rest)
-        for ace in aces:
-            if total <= 10:
-                total += ace[0]
-            else:
-                total += ace[1]
-
-        self.hand_value = total
-
-    def reset(self, deck):
-        self.hand = []
-        self.hand_value = 0
-        # self.shoe = deck
+    def reset(self):
+        self.hand.reset()
 
     def __str__(self):
         return f"There are {len(self.shoe)} cards in the shoe."
@@ -425,21 +416,17 @@ while game_on:
     game_start = game_on = proceed()
 
     # Initiate class instances
-    game_deck = Deck()
-
-    dealer = Dealer(game_deck)
+    dealer = Dealer()
     player = Player()
+
     print(f"\nHello {player.name}!")
     print(f"\nThere are {dealer.shoe_left} cards in the shoe!")
-
-    # Initial shuffle the deck
-    game_deck.shuffle()
     time.sleep(3)
 
     # Initial bet
-    if player.bank <= 0:
+    if player.chips.bank <= 0:
         print("\nYour initial bank is empty!")
-        player.add_funds()
+        player.chips.add_funds()
         time.sleep(2)
 
     # Check if shoe is empty
@@ -450,37 +437,37 @@ while game_on:
             break
 
         player.reset()
-        dealer.reset(game_deck)
-        dealer.shuffle()
+        dealer.reset()
+        [dealer.shoe.shuffle() for _ in range(3)]
 
         # Deal cards
-        [player.add_cards(dealer.deal_one()) for _ in range(2)]
-        [dealer.add_cards(dealer.deal_one()) for _ in range(2)]
+        [player.hand.add(dealer.deal_one()) for _ in range(2)]
+        dealer.hand.add(dealer.deal_one())
 
         # Clear output
         print("\n" * 100)
 
-        player.check_hand()
-        dealer.check_hand()
+        player.hand.check()
+        dealer.hand.check()
         print_hands(dealer, player)
 
         # Ask for a bet
-        player.box += player.bet()
+        player.box += player.chips.bet()
         time.sleep(2)
 
         # Second loop with a hit
         while True:
-            player.check_hand()
-            dealer.check_hand()
-            dealer.shuffle()
+            player.hand.check()
+            dealer.hand.check()
+            dealer.shoe.shuffle()
             print_hands(dealer, player)
 
             # Deal cards
 
             # Player's turn
             while True:
-                player.check_hand()
-                if player.hand_value >= 21:
+                player.hand.check()
+                if player.hand.value >= 21:
                     time.sleep(2)
                     break
                 elif dealer.shoe_left == 0:
@@ -493,16 +480,16 @@ while game_on:
                 if not hit:
                     break
                 else:
-                    player.check_hand()
-                    print_hands(dealer, player)
-                    player.add_cards(dealer.deal_one())
-                    player.check_hand()
+                    # player.hand.check()
+                    # print_hands(dealer, player)
+                    player.hand.add(dealer.deal_one())
+                    player.hand.check()
                     print_hands(dealer, player)
 
             # Dealer's turn
             while True:
-                dealer.check_hand()
-                if dealer.hand_value >= 21:
+                dealer.hand.check()
+                if dealer.hand.value >= 21:
                     time.sleep(2)
                     break
                 elif dealer.shoe_left == 0:
@@ -510,73 +497,75 @@ while game_on:
                     time.sleep(2)
                     break
 
-                elif dealer.hand_value <= 16:
-                    dealer.add_cards(dealer.deal_one())
-                    dealer.check_hand()
+                elif dealer.hand.value <= 16:
+                    dealer.hand.add(dealer.deal_one())
+                    dealer.hand.check()
                     print_hands(dealer, player)
                     time.sleep(2)
 
-                elif dealer.hand_value >= 17:
+                elif dealer.hand.value >= 17:
                     break
 
-            player.check_hand()
-            dealer.check_hand()
+            player.hand.check()
+            dealer.hand.check()
             print_hands(dealer, player)
 
             # Check hands
-            if player.hand_value > 21 >= dealer.hand_value:
+            if player.hand.value > 21 >= dealer.hand.value:
                 print(f"\nBUST! Your bet {player.box} lost.")
                 time.sleep(4)
                 break
 
-            elif dealer.hand_value == 21 == player.hand_value:
-                player.bank += player.box
-                player.money_won += player.box
+            elif dealer.hand.value == 21 == player.hand.value:
+                player.chips.bank += player.box
+                player.chips.won += player.box
                 player.rounds_won += 1
                 print(f"\nTIE! Double BlackJack! You won {player.box}.")
-                player.history.append(f"{player.name},ADD,{player.box},win")
+                player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
-            elif 21 > player.hand_value > dealer.hand_value:
-                player.bank += player.box
-                player.money_won += player.box
+            elif 21 > player.hand.value > dealer.hand.value:
+                player.chips.bank += player.box
+                player.chips.won += player.box
                 player.rounds_won += 1
                 print(f"\nWIN! Your bet {player.box} won!")
-                player.history.append(f"{player.name},ADD,{player.box},win")
+                player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
-            elif dealer.hand_value != 21 == player.hand_value:
-                player.bank += player.box * 1.5
-                player.money_won += player.box * 1.5
+            elif dealer.hand.value != 21 == player.hand.value:
+                player.chips.bank += player.box * 1.5
+                player.chips.won += player.box * 1.5
                 player.rounds_won += 1
                 print(f"\nBALCKJACK! Congratulations! You won {player.box * 1.5}")
-                player.history.append(f"{player.name},ADD,{player.box  * 1.5},win")
+                player.chips.history.append(
+                    f"{player.name},ADD,{player.box  * 1.5},win"
+                )
                 time.sleep(5)
                 break
 
-            elif player.hand_value < dealer.hand_value <= 21:
+            elif player.hand.value < dealer.hand.value <= 21:
                 print(f"\nBUST! Your bet {player.box} lost.")
                 time.sleep(4)
                 break
 
-            elif (player.hand_value == dealer.hand_value) or (
-                player.hand_value > 21 and dealer.hand_value > 21
+            elif (player.hand.value == dealer.hand.value) or (
+                player.hand.value > 21 and dealer.hand.value > 21
             ):
-                player.bank += player.box
-                player.money_won += player.box
+                player.chips.bank += player.box
+                player.chips.won += player.box
                 print(f"\nTIE! You won {player.box}.")
-                player.history.append(f"{player.name},ADD,{player.box},win")
+                player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
-            elif dealer.hand_value > 21 > player.hand_value:
-                player.bank += player.box
-                player.money_won += player.box
+            elif dealer.hand.value > 21 > player.hand.value:
+                player.chips.bank += player.box
+                player.chips.won += player.box
                 player.rounds_won += 1
                 print(f"\nWIN! Your bet {player.box} won!")
-                player.history.append(f"{player.name},ADD,{player.box},win")
+                player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
@@ -584,9 +573,9 @@ while game_on:
                 raise NameError("Unknown situation!")
 
         # Ask to play again
-        if player.bank == 0:
+        if player.chips.bank == 0:
             print("\nYour bank is empty!")
-            player.add_funds()
+            player.chips.add_funds()
 
     # Displaying final game scores
     game_over(player)
