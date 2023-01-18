@@ -1,10 +1,40 @@
 # Black Jack Game
 
+Welcome to this Black Jack game! This game is a student project written in Python for an online course on Udemy.com. This game utilizes classes and functions to create a full-fledged Black Jack game.
+
 ![Cards](https://samsfun.ru/assets/images/content/Blackjack/en/black-jack-strategien.jpg)
 
-[[TOC]]
-
-Welcome to this Black Jack game! This game is a student project written in Python for an online course on Udemy.com. This game utilizes classes and functions to create a full-fledged Black Jack game.
+- [Black Jack Game](#black-jack-game)
+  - [1. Features](#1-features)
+  - [2. Classes](#2-classes)
+    - [2.1. Card](#21-card)
+      - [2.1.1.Parameters](#211parameters)
+      - [2.1.2. Attributes](#212-attributes)
+      - [2.1.3. Methods](#213-methods)
+    - [2.2. Deck](#22-deck)
+    - [2.3. Hand](#23-hand)
+      - [2.3.1. Attributes](#231-attributes)
+      - [2.3.2. Methods](#232-methods)
+    - [2.4. Chips](#24-chips)
+      - [2.4.1. Initialization](#241-initialization)
+      - [2.4.2. Methods](#242-methods)
+    - [2.5. Player](#25-player)
+      - [2.5.1. Initialization](#251-initialization)
+    - [2.6. Methods](#26-methods)
+    - [2.7. Dealer](#27-dealer)
+      - [2.7.1. Attributes](#271-attributes)
+      - [2.7.2. Initialization](#272-initialization)
+      - [2.7.3. Methods](#273-methods)
+  - [3. Functions](#3-functions)
+    - [3.1.continue\_game()](#31continue_game)
+    - [3.2. proceed()](#32-proceed)
+    - [3.3. print\_hands(dl, pl)](#33-print_handsdl-pl)
+    - [3.4. game\_over(pl)](#34-game_overpl)
+    - [3.5. statement(pl\_name)](#35-statementpl_name)
+    - [3.6. log\_score()](#36-log_score)
+  - [4. Main Game Logic](#4-main-game-logic)
+  - [5. Installation](#5-installation)
+  - [6. Libraries](#6-libraries)
 
 ## 1. Features
 
