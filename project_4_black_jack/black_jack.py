@@ -505,6 +505,10 @@ while True:
         dealer.reset()
         [dealer.shoe.shuffle() for _ in range(3)]
 
+        # Ask for a bet
+        player.box += player.chips.bet()
+        time.sleep(2)
+
         # Deal cards
         [player.hand.add(dealer.deal_one()) for _ in range(2)]
         dealer.hand.add(dealer.deal_one())
@@ -515,10 +519,6 @@ while True:
         player.hand.check()
         dealer.hand.check()
         print_hands(dealer, player)
-
-        # Ask for a bet
-        player.box += player.chips.bet()
-        time.sleep(2)
 
         # Second loop with a hit
         while True:
