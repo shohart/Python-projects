@@ -389,8 +389,8 @@ class Chips:
                 print("\nSorry that is not a digit! Please enter a valid digit!")
                 continue
 
-            elif int(amount) == 0:
-                print("\nSorry you should add some funds to continue!")
+            elif int(amount) < 2:
+                print("\nSorry you should add funds enough to place a bet (min 2)!")
                 continue
 
             else:
@@ -452,6 +452,8 @@ class Player:
 
     def __init__(self):
         self.name = input("Enter your name to proceed: ")
+        if len(self.name) == 0:
+            self.name = "Unknown"
         self.hand = Hand()
         self.chips = Chips(self.name)
         self.rounds_won = 0
