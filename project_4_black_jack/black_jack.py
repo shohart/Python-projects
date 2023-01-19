@@ -495,7 +495,7 @@ while True:
         time.sleep(2)
 
     # Check if shoe is empty
-    while game_start and game_on and dealer.shoe_left >= 4:
+    while dealer.shoe_left >= 4:
         if dealer.shoe_left < 4:
             print("No cards left in the shoe!")
             time.sleep(2)
