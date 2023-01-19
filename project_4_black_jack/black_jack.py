@@ -478,8 +478,8 @@ while True:
         " * If both totals are equal, the game is a tie.\n"
     )
 
-    game_start = game_on = proceed()
-    if not game_on:
+    game_start = proceed()
+    if not game_start:
         break
 
     # Initiate class instances
