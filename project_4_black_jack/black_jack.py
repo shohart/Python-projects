@@ -311,7 +311,7 @@ class Hand:
         self.value = 0
 
     def __str__(self):
-        return f"Hand is {len(self.hand)} cards. Score: {self.value}"
+        return f"Hand is {len(self.cards)} cards. Score: {self.value}"
 
 
 class Chips:
