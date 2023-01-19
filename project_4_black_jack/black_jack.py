@@ -34,16 +34,22 @@ def continue_game():
     bool
         True if the user answered yes, False if the user answered no
     """
-    go_game = "empty value"
+    go_game = "_"
 
-    while go_game.capitalize()[0] not in ["Y", "N"]:
-        go_game = input("Continue? Enter Yes or No: ")
+    try:
 
-        if go_game.capitalize()[0] not in ["Y", "N"]:
-            print("\n" * 100)
-            print(
-                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
-            )
+        while go_game.capitalize()[0] not in ["Y", "N"]:
+            go_game = input("Continue? Enter Yes or No: ")
+
+            if go_game.capitalize()[0] not in ["Y", "N"]:
+                print("\n" * 100)
+                print(
+                    "Sorry, I didn't understand.\n"
+                    "Please make sure to enter Yes or No."
+                )
+    except IndexError:
+
+        go_game = "N"
 
     return bool(go_game.capitalize()[0] == "Y")
 
@@ -57,16 +63,21 @@ def proceed():
     Returns:
         boolean: True if the players decide to start the game, False if not.
     """
-    go_game = "empty value"
+    go_game = "_"
 
-    while go_game.capitalize()[0] not in ["Y", "N"]:
+    try:
 
-        go_game = input("Start the game? Enter Yes or No: ")
+        while go_game.capitalize()[0] not in ["Y", "N"]:
 
-        if go_game.capitalize()[0] not in ["Y", "N"]:
-            print(
-                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
-            )
+            go_game = input("Start the game? Enter Yes or No: ")
+
+            if go_game.capitalize()[0] not in ["Y", "N"]:
+                print(
+                    "Sorry, I didn't understand.\n"
+                    "Please make sure to enter Yes or No."
+                )
+    except IndexError:
+        go_game = "N"
 
     return bool(go_game.capitalize()[0] == "Y")
 
@@ -378,7 +389,7 @@ class Chips:
                 print("\nSorry that is not a digit! Please enter a valid digit!")
                 continue
 
-            elif int(amount) == "0":
+            elif int(amount) == 0:
                 print("\nSorry you should add some funds to continue!")
                 continue
 
@@ -453,13 +464,17 @@ class Player:
 
         move = "_"
 
-        while move.lower()[0] not in ["h", "s"]:
-            move = input("\nStand or Hit? ").lower()
+        try:
 
-            if move.lower()[0] not in ["h", "s"]:
-                print("\n" * 100)
-                print('Sorry, you need to enter "Hit" or "Stand"!')
-                continue
+            while move.lower()[0] not in ["h", "s"]:
+                move = input("\nStand or Hit? ").lower()
+
+                if move.lower()[0] not in ["h", "s"]:
+                    print("\n" * 100)
+                    print('Sorry, you need to enter "Hit" or "Stand"!')
+                    continue
+        except IndexError:
+            move = "s"
 
         return bool(move.lower()[0] == "h")
 
