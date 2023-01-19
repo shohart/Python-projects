@@ -455,8 +455,6 @@ class Dealer:
 print("\n" * 100)
 
 # initial variables
-game_start = True
-game_on = True
 player = Player()
 
 # Main game cycle
