@@ -399,7 +399,7 @@ class Chips:
         amount = "_"
 
         while True:
-            amount = input("\nPlace a bet! Enter the ammount: ")
+            amount = input("\nPlace a bet! Enter the amount (minimum bet is 2): ")
 
             if not amount.isdigit() or amount == "0":
                 print("\nSorry that is not a valid bet!")
@@ -407,6 +407,10 @@ class Chips:
 
             elif int(amount) > self.bank:
                 print("\nOops! You do not have so much money! Please reduce a bet!")
+                continue
+
+            elif int(amount) < 2:
+                print("\nOops! minimum bet is 2!")
                 continue
 
             else:
