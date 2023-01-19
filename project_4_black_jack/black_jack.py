@@ -586,8 +586,6 @@ while True:
             dealer.shoe.shuffle()
             print_hands_hidden(dealer, player)
 
-            # Deal cards
-
             # Player's turn
             while True:
                 player.hand.check()
@@ -612,6 +610,9 @@ while True:
 
             # Dealer's turn
             while True:
+                if player.hand.value > 21:
+                    time.sleep(2)
+                    break
                 dealer.hand.check()
                 if dealer.hand.value >= 21:
                     time.sleep(2)
