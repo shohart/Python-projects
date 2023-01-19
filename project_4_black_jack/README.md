@@ -34,7 +34,8 @@ Welcome to this Black Jack game! This game is a student project written in Pytho
     - [3.6. log\_score()](#36-log_score)
   - [4. Main Game Logic](#4-main-game-logic)
   - [5. Installation](#5-installation)
-  - [6. Libraries](#6-libraries)
+  - [6. Project Structure](#6-project-structure)
+  - [7. Libraries](#7-libraries)
 
 ## 1. Features
 
@@ -312,7 +313,16 @@ git sparse-checkout init --cone
 git sparse-checkout set UDEMY-python-projects/project_4_black_jack
 ```
 
-## 6. Libraries
+## 6. Project Structure
+
+Project contains 4 files:
+
+- [black_jack.ipynb](./black_jack.ipynb) - Jupiter notebook with development stages and steps.
+- [black_jack.py](./black_jack.py) - a python script, containing main code of the project.
+- [requirements.txt](./requirements.txt) - a list of python modules and versions.
+- [README.md](./README.md) - this file.
+
+## 7. Libraries
 
 - random
 - time
