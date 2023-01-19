@@ -36,16 +36,16 @@ def continue_game():
     """
     go_game = "empty value"
 
-    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+    while go_game.capitalize()[0] not in ["Y", "N"]:
         go_game = input("Continue? Enter Yes or No: ")
 
-        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+        if go_game.capitalize()[0] not in ["Y", "N"]:
             print("\n" * 100)
             print(
                 "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
             )
 
-    return bool(go_game.capitalize() in ["Yes", "Y"])
+    return bool(go_game.capitalize()[0] == "Y")
 
 
 def proceed():
@@ -59,16 +59,16 @@ def proceed():
     """
     go_game = "empty value"
 
-    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+    while go_game.capitalize()[0] not in ["Y", "N"]:
 
         go_game = input("Start the game? Enter Yes or No: ")
 
-        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+        if go_game.capitalize()[0] not in ["Y", "N"]:
             print(
                 "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
             )
 
-    return bool(go_game.capitalize() in ["Yes", "Y"])
+    return bool(go_game.capitalize()[0] == "Y")
 
 
 def print_hands(dl, pl):
@@ -82,6 +82,32 @@ def print_hands(dl, pl):
     print(f"Dealer: {dl.hand.value}")
     for i in range(5):
         row = " ".join(dl.hand.cards[n].pic[i] for n in range(len(dl.hand.cards)))
+        print(row)
+
+    print("\n")
+    if pl.box != 0:
+        print(f"Current box: {pl.box}")
+    else:
+        print("\n")
+    print("\n")
+
+    print(f"Player: {pl.hand.value}")
+    for i in range(5):
+        row = " ".join(pl.hand.cards[n].pic[i] for n in range(len(pl.hand.cards)))
+        print(row)
+
+
+def print_hands_hidden(dl, pl):
+    """Prints the current hands of the dealer and player.
+    Dealer hand is partly hidden.
+
+    Parameters:
+    dl (Dealer): The dealer object
+    pl (Player): The player object
+    """
+    print("\n" * 100)
+    for i in range(5):
+        row = " ".join([dl.hand.cards[0].back[i], dl.hand.cards[1].pic[i]])
         print(row)
 
     print("\n")
@@ -207,6 +233,13 @@ class Card:
             f"│{self.rank}     │",
             f"│   {self.suit}   │",
             f"│    {self.rank} │",
+            "└───────┘",
+        ]
+        self.back = [
+            "┌───────┐",
+            "│ + + + │",
+            "│ + + + │",
+            "│ + + + │",
             "└───────┘",
         ]
 
@@ -416,15 +449,15 @@ class Player:
 
         move = "_"
 
-        while move not in ["stand", "hit", "h", "s"]:
+        while move.lower()[0] not in ["h", "s"]:
             move = input("\nStand or Hit? ").lower()
 
-            if move not in ["stand", "hit", "h", "s"]:
+            if move.lower()[0] not in ["h", "s"]:
                 print("\n" * 100)
                 print('Sorry, you need to enter "Hit" or "Stand"!')
                 continue
 
-        return bool(move in ["hit", "h"])
+        return bool(move.lower()[0] == "h")
 
     def reset(self):
         """
@@ -544,18 +577,14 @@ while True:
 
         # Deal cards
         [player.hand.add(dealer.deal_one()) for _ in range(2)]
-        dealer.hand.add(dealer.deal_one())
-
-        player.hand.check()
-        dealer.hand.check()
-        print_hands(dealer, player)
+        [dealer.hand.add(dealer.deal_one()) for _ in range(2)]
 
         # Second loop with a hit
         while True:
             player.hand.check()
             dealer.hand.check()
             dealer.shoe.shuffle()
-            print_hands(dealer, player)
+            print_hands_hidden(dealer, player)
 
             # Deal cards
 
@@ -579,7 +608,7 @@ while True:
                     # print_hands(dealer, player)
                     player.hand.add(dealer.deal_one())
                     player.hand.check()
-                    print_hands(dealer, player)
+                    print_hands_hidden(dealer, player)
 
             # Dealer's turn
             while True:
@@ -606,8 +635,10 @@ while True:
             print_hands(dealer, player)
 
             # Check hands
-            if player.hand.value > 21 >= dealer.hand.value:
-                print(f"\nBUST! Your bet {player.box} lost.")
+            if player.hand.value > 21:
+                print(
+                    f"\nBUST! Your bet {player.box} lost. Your bank {player.chips.bank}"
+                )
                 time.sleep(4)
                 break
 
@@ -615,33 +646,44 @@ while True:
                 player.chips.bank += player.box
                 player.chips.won += player.box
                 player.rounds_won += 1
-                print(f"\nTIE! Double BlackJack! You won {player.box}.")
+                print(
+                    f"\nTIE! Double BlackJack! You won {player.box}. "
+                    f"Your bank {player.chips.bank}"
+                )
                 player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
             elif 21 > player.hand.value > dealer.hand.value:
-                player.chips.bank += player.box
-                player.chips.won += player.box
+                player.chips.bank += player.box * 2
+                player.chips.won += player.box * 2
                 player.rounds_won += 1
-                print(f"\nWIN! Your bet {player.box} won!")
-                player.chips.history.append(f"{player.name},ADD,{player.box},win")
+                print(
+                    f"\nWIN! Your won {player.box * 2}! Your bank {player.chips.bank}"
+                )
+                player.chips.history.append(f"{player.name},ADD,{player.box * 2},win")
                 time.sleep(4)
                 break
 
             elif dealer.hand.value != 21 == player.hand.value:
-                player.chips.bank += player.box * 1.5
-                player.chips.won += player.box * 1.5
+                player.chips.bank += player.box * 2.5
+                player.chips.won += player.box * 2.5
                 player.rounds_won += 1
-                print(f"\nBALCKJACK! Congratulations! You won {player.box * 1.5}")
+                print(
+                    f"\nBALCKJACK! Congratulations! You won {player.box * 2.5}. "
+                    f"Your bank {player.chips.bank}"
+                )
                 player.chips.history.append(
-                    f"{player.name},ADD,{player.box  * 1.5},win"
+                    f"{player.name},ADD,{player.box  * 2.5},win"
                 )
                 time.sleep(5)
                 break
 
             elif player.hand.value < dealer.hand.value <= 21:
-                print(f"\nBUST! Your bet {player.box} lost.")
+                print(
+                    f"\nBUST! Your bet {player.box} lost. "
+                    f"Your bank {player.chips.bank}"
+                )
                 time.sleep(4)
                 break
 
@@ -650,17 +692,20 @@ while True:
             ):
                 player.chips.bank += player.box
                 player.chips.won += player.box
-                print(f"\nTIE! You won {player.box}.")
+                print(f"\nTIE! You won {player.box}. Your bank {player.chips.bank}")
                 player.chips.history.append(f"{player.name},ADD,{player.box},win")
                 time.sleep(4)
                 break
 
             elif dealer.hand.value > 21 > player.hand.value:
-                player.chips.bank += player.box
-                player.chips.won += player.box
+                player.chips.bank += player.box * 2
+                player.chips.won += player.box * 2
                 player.rounds_won += 1
-                print(f"\nWIN! Your bet {player.box} won!")
-                player.chips.history.append(f"{player.name},ADD,{player.box},win")
+                print(
+                    f"\nWIN! Your won {player.box * 2}! "
+                    f"Your bank {player.chips.bank}"
+                )
+                player.chips.history.append(f"{player.name},ADD,{player.box * 2},win")
                 time.sleep(4)
                 break
 
