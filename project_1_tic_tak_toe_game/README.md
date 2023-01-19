@@ -4,25 +4,28 @@ This is a simple game of tic tac toe written in Python. The game is played betwe
 
 ## Glossary
 
-1. [Game Layout](#game-layout)
-2. [Gameplay](#gameplay)
-3. [Used functions](#functions)
-   - [game_board](#game_board)
-   - [user_pic](#user_pic)
-   - [user_choice](#user_choice)
-   - [continue_game](#continue_game)
-   - [board_replace](#board_replace)
-   - [check_win](#check_win)
-   - [choose_first](#choose_first)
-   - [reset board](#reset_board)
-   - [board full check](#board_full_check)
-   - [proceed](#proceed)
-   - [game_over](#game_over)
-   - [log_score](#log_score)
-   - [set_names](#set_names)
-4. [Project structure](#project-structure)
-5. [Libraries](#libraries)
-6. [Installation](#installation)
+- [Tic Tak Toe](#tic-tak-toe)
+  - [Glossary](#glossary)
+  - [Game Layout](#game-layout)
+  - [Gameplay](#gameplay)
+  - [Functions](#functions)
+    - [game\_board](#game_board)
+    - [user\_pic](#user_pic)
+    - [user\_choice](#user_choice)
+    - [continue\_game](#continue_game)
+    - [board\_replace](#board_replace)
+    - [check\_win](#check_win)
+    - [choose\_first](#choose_first)
+    - [reset\_board](#reset_board)
+    - [board\_full\_check](#board_full_check)
+    - [proceed](#proceed)
+    - [game\_over](#game_over)
+    - [log\_score](#log_score)
+    - [set\_names](#set_names)
+    - [board\_update](#board_update)
+  - [Project Structure](#project-structure)
+  - [Installation](#installation)
+  - [Libraries](#libraries)
 
 ## Game Layout
 
@@ -93,6 +96,10 @@ Structure of a log file is: 'date, name, score'
 ### set_names
 
 Asks players to enter their names to be used in the output and _'scores.txt'_.
+
+### board_update
+
+Updates a game board according to changes in the game_lisе
 
 ## Project Structure
 

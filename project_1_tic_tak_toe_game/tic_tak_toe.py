@@ -23,6 +23,26 @@ def game_board(board_list):
     print(board_list)
 
 
+def board_update(board_list):
+    """
+    Updates game board to print, using game list values
+
+    Args:
+        board_list (list): A list, containing board info
+
+    Returns:
+        str: Updated board representation to print
+    """
+    result = (
+        f"  {board_list[7]} | {board_list[8]} | {board_list[9]} \n "
+        "---|---|---\n"
+        f"  {board_list[4]} | {board_list[5]} | {board_list[6]} \n "
+        "---|---|---\n"
+        f"  {board_list[1]} | {board_list[2]} | {board_list[3]} \n"
+    )
+    return result
+
+
 def user_pic():
     """This function prompts the user to select either an 'X' or an 'O'
     and returns the choice as a tuple with the player 1's choice first and
@@ -193,11 +213,11 @@ def reset_board():
     def_board_list = ["not_used", " ", " ", " ", " ", " ", " ", " ", " ", " "]
 
     def_board = (
-        f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
+        f"  {def_board_list[7]} | {def_board_list[8]} | {def_board_list[9]} \n "
         "---|---|---\n"
-        f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
+        f"  {def_board_list[4]} | {def_board_list[5]} | {def_board_list[6]} \n "
         "---|---|---\n"
-        f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
+        f"  {def_board_list[1]} | {def_board_list[2]} | {def_board_list[3]} \n"
     )
 
     def_turn = choose_first()
@@ -233,7 +253,7 @@ def proceed():
 
         go_game = input("Start the game? Enter Yes or No: ")
 
-        if go_game.capitalize() not in ["Yes", "No"]:
+        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
             print(
                 "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
             )
@@ -301,28 +321,11 @@ def set_names():
     return name1, name2
 
 
-# Clear any historical output and show the game list
-print("\n" * 100)
-
-# Defining rows of a board
+# Defining rows of a board for start screen
 pos = ["not_used", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # Defining board itself
-board = (
-    f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
-    "---|---|---\n"
-    f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
-    "---|---|---\n"
-    f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
-)
-
-
-# Setting initial service variables
-game_on = True
-player1 = "Empty"
-player2 = "Empty"
-win = "nobody"
-board_full = False
+board = board_update(pos)
 
 # Storing total wins data
 wins_data = {"Player 1": 0, "Player 2": 0}
@@ -345,32 +348,30 @@ names_data["Player 1"], names_data["Player 2"] = set_names()
 # Choose a marker for players
 player1, player2 = user_pic()
 
-# Clear output
-print("\n" * 100)
-
-game_start = True
-
 # Main game cycle
-while game_on and game_start:
-
+while True:
     # Defaulting board values
     win, pos, board, turn = reset_board()
-    board_full = board_full_check()
-    game_start = True
 
-    # Clear any historical output and show the game list
+    # Clear output
     print("\n" * 100)
 
-    # Printing info
+    # Display the board
+    game_board(board)
+
+    # Print info
     print(f"Player 1 = {names_data['Player 1']} = {player1}")
     print(f"Player 2 = {names_data['Player 2']} = {player2}")
     print(f"Player {turn} goes first!\n")
 
     # Promt to start the game
     game_start = proceed()
+    if not game_start:
+        break
 
     # Turn cycle
-    while win == "nobody" and not board_full:
+    # while win == "nobody" and not board_full:
+    while True:
 
         # Clear any historical output and show the game list
         print("\n" * 100)
@@ -391,16 +392,7 @@ while game_on and game_start:
         pos = board_replace(pos, position)
 
         # Update the board
-        board = (
-            f"  {pos[7]} | {pos[8]} | {pos[9]} \n "
-            "---|---|---\n"
-            f"  {pos[4]} | {pos[5]} | {pos[6]} \n "
-            "---|---|---\n"
-            f"  {pos[1]} | {pos[2]} | {pos[3]} \n"
-        )
-
-        # Show the updated game board
-        game_board(board)
+        board = board_update(pos)
 
         # Checking winner
         win = check_win()
@@ -411,6 +403,7 @@ while game_on and game_start:
             print(f"{names_data[win]} won!\n")
             wins_data[win] += 1
             print(board)
+            break
 
         # Checking full board
         board_full = board_full_check()
@@ -420,6 +413,7 @@ while game_on and game_start:
             print("\n" * 100)
             print("No free spots left on a board! It seems to be a tie!\n")
             print(board)
+            break
 
         # Adding to a turn counter
         turn += 1
@@ -432,3 +426,4 @@ while game_on and game_start:
         game_over()
         log_score(names_data["Player 1"], wins_data["Player 1"])
         log_score(names_data["Player 2"], wins_data["Player 2"])
+        break
