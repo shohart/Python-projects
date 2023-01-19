@@ -235,7 +235,7 @@ class Deck:
         """
         Shuffle a deck.
         """
-        random.shuffle(self.all_cards)
+        [random.shuffle(self.all_cards) for _ in range(random.randint(1, 4))]
         print("Deck has been shuffled!")
 
     def deal_one(self):
@@ -501,9 +501,10 @@ while True:
             time.sleep(2)
             break
 
+        # reset hands and shuffle the deck
         player.reset()
         dealer.reset()
-        [dealer.shoe.shuffle() for _ in range(3)]
+        dealer.shoe.shuffle()
 
         # Ask for a bet
         player.box += player.chips.bet()
