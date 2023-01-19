@@ -224,12 +224,32 @@ class Deck:
 
     def __init__(self):
         self.all_cards = []
+        self.num_of_decks = "_"
 
+        # Initialize a deck
         for suit in suits:
 
             for rank in ranks:
                 created_card = Card(suit, rank)
                 self.all_cards.append(created_card)
+
+        # chose number of card decks
+        while True:
+            x = input("\nChoose number of decks (from 1 to 7): ")
+
+            if not x.isdigit():
+                print("\nSorry that is not a digit! Please enter a valid digit!")
+                continue
+
+            elif int(x) not in range(1, 8):
+                print("\nYou should enter a value from 1 to 7!")
+                continue
+
+            else:
+                self.num_of_decks = int(x)
+                break
+
+        self.all_cards *= self.num_of_decks
 
     def shuffle(self):
         """
@@ -318,12 +338,20 @@ class Chips:
         """
         amount = "_"
 
-        while not amount.isdigit() and amount != "0":
+        while True:
             amount = input("\nHow much do you want to add? ")
 
             if not amount.isdigit():
                 print("\nSorry that is not a digit! Please enter a valid digit!")
                 continue
+
+            elif int(amount) == "0":
+                print("\nSorry you should add some funds to continue!")
+                continue
+
+            else:
+                amount = int(amount)
+                break
 
         self.bank += int(amount)
         self.deposit += int(amount)
@@ -504,6 +532,10 @@ while True:
         # reset hands and shuffle the deck
         player.reset()
         dealer.reset()
+
+        # Clear output
+        print("\n" * 100)
+
         dealer.shoe.shuffle()
 
         # Ask for a bet
@@ -513,9 +545,6 @@ while True:
         # Deal cards
         [player.hand.add(dealer.deal_one()) for _ in range(2)]
         dealer.hand.add(dealer.deal_one())
-
-        # Clear output
-        print("\n" * 100)
 
         player.hand.check()
         dealer.hand.check()
