@@ -124,3 +124,4 @@ git sparse-checkout set UDEMY-python-projects/project_1_tic_tak_toe_game
 - random
 - datetime
 - os
+- art

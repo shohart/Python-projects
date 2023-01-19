@@ -12,6 +12,7 @@ in a horizontal, vertical, or diagonal row is the winner.
 import random
 import os
 import datetime as dt
+import art
 
 
 # Defining functions
@@ -335,8 +336,10 @@ names_data = {"Player 1": "Unknown", "Player 2": "Unknown"}
 
 # Printing Welcome message
 print("\n" * 100)
+art.tprint("Tic Tak Toe", "tarty4")
 print(
-    "Welcome to the Tic Tak Toe game! "
+    "\n"
+    "Welcome to the Tic Tak Toe game!\n"
     "You pick the spot by index.\n"
     "Here is the board indexes:\n"
 )
@@ -400,6 +403,8 @@ while True:
         # Actions if win accurse
         if win != "nobody":
             print("\n" * 100)
+            art.aprint("basking in glory")
+            print("\n")
             print(f"{names_data[win]} won!\n")
             wins_data[win] += 1
             print(board)
@@ -411,6 +416,8 @@ while True:
         # Checking for a full board and no win
         if board_full and win == "nobody":
             print("\n" * 100)
+            art.aprint("shrug")
+            print("\n")
             print("No free spots left on a board! It seems to be a tie!\n")
             print(board)
             break

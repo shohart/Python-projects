@@ -464,7 +464,7 @@ while True:
 
     # Display intro screen
     print("\n" * 100)
-    art.tprint("BlackJack", font="speed")
+    art.tprint("BlackJack", font="tarty1")
     print(f"\nHello {player.name}!\n")
     print(
         "Rules:\n"
