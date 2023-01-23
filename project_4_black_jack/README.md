@@ -311,6 +311,7 @@ git clone --no-checkout https://github.com/shohart/ shohart
 cd shohart
 git sparse-checkout init --cone
 git sparse-checkout set UDEMY-python-projects/project_4_black_jack
+python setup.py py2exe
 ```
 
 ## 6. Project Structure
@@ -329,3 +330,4 @@ Project contains 4 files:
 - os
 - datetime
 - art
+- py2exe
