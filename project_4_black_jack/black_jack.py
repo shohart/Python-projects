@@ -77,7 +77,7 @@ def proceed():
                     "Please make sure to enter Yes or No."
                 )
     except IndexError:
-        go_game = "N"
+        go_game = "Y"
 
     return bool(go_game.capitalize()[0] == "Y")
 
@@ -172,11 +172,14 @@ def statement(pl_name):
 
     if os.path.exists(filename):
         append_write = "a"  # append if already exists
+        start_line = ""
     else:
         append_write = "w"  # make a new file if not
+        start_line = "date,time,name,operation,amount,type\n"
 
     with open(filename, append_write, encoding="utf8") as score_file:
         for op in pl_name.chips.history:
+            score_file.write(start_line)
             score_file.write(now + "," + op + "\n")
 
 
@@ -197,12 +200,15 @@ def log_score(pl_name):
 
     if os.path.exists(filename):
         append_write = "a"  # append if already exists
+        start_line = ""
     else:
         append_write = "w"  # make a new file if not
+        start_line = "date,time,name,rounds_won,end_balance,total_deposit\n"
 
     now = dt.datetime.now().strftime("%d-%m-%Y,%H:%M")
 
     with open(filename, append_write, encoding="utf8") as score_file:
+        score_file.write(start_line)
         score_file.write(
             now
             + ","

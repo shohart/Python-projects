@@ -105,25 +105,31 @@ def user_choice():
 
 def continue_game():
     """
-    Defines if the game should continue or not based on an input from the user.
+    Function to ask the user if they would like to continue playing the game
 
-    Parameters:
-        None
-
-    Returns:
-        bool: True if the user entered yes, False otherwise
+    Returns
+    -------
+    bool
+        True if the user answered yes, False if the user answered no
     """
     go_game = "_"
 
-    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
-        go_game = input("Continue? Enter Yes or No: ")
-        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
-            print("\n" * 100)
-            print(
-                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
-            )
+    try:
 
-    return bool(go_game.capitalize() in ["Yes", "Y"])
+        while go_game.capitalize()[0] not in ["Y", "N"]:
+            go_game = input("Continue? Enter Yes or No: ")
+
+            if go_game.capitalize()[0] not in ["Y", "N"]:
+                print("\n" * 100)
+                print(
+                    "Sorry, I didn't understand.\n"
+                    "Please make sure to enter Yes or No."
+                )
+    except IndexError:
+
+        go_game = "N"
+
+    return bool(go_game.capitalize()[0] == "Y")
 
 
 def board_replace(dictionary, place):
@@ -248,18 +254,23 @@ def proceed():
     Returns:
         boolean: True if the players decide to start the game, False if not.
     """
-    go_game = "empty value"
+    go_game = "_"
 
-    while go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
+    try:
 
-        go_game = input("Start the game? Enter Yes or No: ")
+        while go_game.capitalize()[0] not in ["Y", "N"]:
 
-        if go_game.capitalize() not in ["Yes", "No", "Y", "N"]:
-            print(
-                "Sorry, I didn't understand.\n" "Please make sure to enter Yes or No."
-            )
+            go_game = input("Start the game? Enter Yes or No: ")
 
-    return bool(go_game.capitalize() in ["Yes", "Y"])
+            if go_game.capitalize()[0] not in ["Y", "N"]:
+                print(
+                    "Sorry, I didn't understand.\n"
+                    "Please make sure to enter Yes or No."
+                )
+    except IndexError:
+        go_game = "Y"
+
+    return bool(go_game.capitalize()[0] == "Y")
 
 
 def game_over():
@@ -299,10 +310,13 @@ def log_score(name, score):
 
     if os.path.exists(filename):
         append_write = "a"  # append if already exists
+        start_line = ""
     else:
         append_write = "w"  # make a new file if not
+        start_line = "date,name,score\n"
 
     with open(filename, append_write, encoding="utf8") as score_file:
+        score_file.write(start_line)
         score_file.write(str(dt.date.today()) + "," + name + "," + str(score) + "\n")
 
 
@@ -318,6 +332,10 @@ def set_names():
 
     name1 = input("Player 1 enter your name: ")
     name2 = input("Player 2 enter your name: ")
+    if name1 == '':
+        name1 = 'Player 1'
+    if name2 == '':
+        name2 = 'Player 2'
 
     return name1, name2
 
