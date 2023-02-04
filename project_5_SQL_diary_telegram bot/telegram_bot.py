@@ -25,7 +25,7 @@ else:
     raise Exception("config.ini file not found!")
 
 
-bot = Bot(token=TG_TOKEN)
+bot = Bot(token=TELEGRAM_API_KEY)
 
 db_name = "sql_diary.db"
 db = diary.Database(db_name)
