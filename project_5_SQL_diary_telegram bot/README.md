@@ -6,7 +6,7 @@
   - [Bot commands](#bot-commands)
   - [Notes](#notes)
 
-This is a telegram bot that helps users keep a daily diary by writing entries and viewing previous entries, all stored in an SQL database. The bot uses the python [aiogram](https://docs.aiogram.io/en/latest/index.html) library for the telegram bot API.
+This is a telegram bot that helps users keep a daily diary by writing entries and viewing previous entries, all stored in an SQL database. The bot uses the python [aiogram](https://docs.aiogram.io/en/latest/index.html) library for the telegram bot API. Bot encrypts messages in database using password, provided by user.
 
 ## Requirements
 
@@ -15,7 +15,6 @@ This is a telegram bot that helps users keep a daily diary by writing entries an
 - configparser
 - logging
 - datetime
-- sql_diary_tg
 - os
 
 ## How to run
@@ -37,12 +36,12 @@ This is a telegram bot that helps users keep a daily diary by writing entries an
 
 ## Bot commands
 
-- /start - start the bot and either register or choose an action if already registered
-- /register - register with the bot
-- /cancel - cancel any action
-- /add_entry - add a new diary entry
-- /view_previous - view previous diary entries
+- **/start** - start the bot and either register or choose an action if already registered
+- **/register** - register with the bot
+- **/cancel** - cancel any action
+- **/add_entry** - add a new diary entry
+- **/view_previous** - view previous diary entries
 
 ## Notes
 
-The SQL diary database will be created as sql_diary.db the first time the bot is run.
+The SQL diary database will be created as **sql_diary.db** the first time the bot is run.
