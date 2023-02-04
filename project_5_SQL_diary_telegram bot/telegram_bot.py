@@ -52,6 +52,10 @@ kb_read = types.ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
 kb_read.add("1", "5", "10", "Custom date")
 kb_read.add("/cancel")
 
+kb_mood = types.ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
+kb_mood.add("Don't ask", "Bad", "Will do", "Good", "Amazing!")
+kb_mood.add("/cancel")
+
 
 # States
 class Form(StatesGroup):
@@ -63,6 +67,7 @@ class Form(StatesGroup):
 
 class WriteStates(StatesGroup):
     password = State()
+    mood = State()
     msg_entry = State()
 
 
@@ -260,13 +265,40 @@ async def process_password_msg(message: types.Message, state: FSMContext):
     if db.check_password(user_id, message.text):
         await WriteStates.next()
         await bot.send_message(
-            message.chat.id, "Enter your message.", reply_markup=kb_clear
+            message.chat.id, "What is your mood?.", reply_markup=kb_mood
         )
     else:
         await message.reply(
             "Password is incorrect! Please enter correct password.",
             reply_markup=kb_clear,
         )
+
+
+@dp.message_handler(
+    lambda message: message.text
+    not in ["Don't ask", "Bad", "Will do", "Good", "Amazing!"],
+    state=WriteStates.mood,
+)
+async def process_mood_invalid(message: types.Message):
+    """
+    If mod entry not valid
+    """
+    return await message.reply(
+        "This input one of the suggested.\n" "Enter a valid value."
+    )
+
+
+@dp.message_handler(state=WriteStates.mood)
+async def process_mood(message: types.Message, state: FSMContext):
+    """
+    Process mood entry
+    """
+    async with state.proxy() as data:
+        data["mood"] = message.text
+        await bot.send_message(
+            message.chat.id, "Enter your message.", reply_markup=kb_clear
+        )
+    await WriteStates.next()
 
 
 @dp.message_handler(state=WriteStates.msg_entry)
@@ -278,7 +310,9 @@ async def process_new_entry(message: types.Message, state: FSMContext):
     user_full_name = message.from_user.full_name
 
     async with state.proxy() as data:
-        db.create_entry(user_full_name, user_id, message.text, data["password"])
+        db.create_entry(
+            user_full_name, user_id, message.text, data["password"], data["mood"]
+        )
 
     logging.info(f"{user_id} {user_full_name} {time.asctime()} added new entry.")
 
@@ -371,12 +405,18 @@ async def process_read_period(message: types.Message, state: FSMContext):
                 user_full_name, user_id, data["password"], int(message.text), offset=0
             )
 
-            for date, msg in data:
+            for date, msg, msg_time, mood in data:
                 await bot.send_message(
                     message.chat.id,
                     md.text(
                         md.text("On", date, md.bold(user_name), "wrote:"),
                         md.text(msg),
+                        md.text(
+                            "Time:",
+                            md.bold(msg_time) + ".",
+                            "Mood:",
+                            md.bold(mood) + ".",
+                        ),
                         sep="\n",
                     ),
                     reply_markup=kb_main,
@@ -411,12 +451,15 @@ async def process_custom_period(message: types.Message, state: FSMContext):
             user_full_name, user_id, data["password"], begin, end
         )
 
-        for date, msg in data:
+        for date, msg, msg_time, mood in data:
             await bot.send_message(
                 message.chat.id,
                 md.text(
                     md.text("On", date, md.bold(user_name), "wrote:"),
                     md.text(msg),
+                    md.text(
+                        "Time:", md.bold(msg_time) + ".", "Mood:", md.bold(mood) + "."
+                    ),
                     sep="\n",
                 ),
                 reply_markup=kb_main,

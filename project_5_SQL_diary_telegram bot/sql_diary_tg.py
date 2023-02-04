@@ -26,6 +26,7 @@ class Database:
                             date text,
                             time text,
                             message_text text,
+                            mood text,
                             UNIQUE(id, name, date)
                         ); """,
             """ CREATE TABLE IF NOT EXISTS users (
@@ -75,7 +76,7 @@ class Database:
         except Error as e:
             print(e)
 
-    def create_entry(self, name, tg_id, message, password):
+    def create_entry(self, name, tg_id, message, password, mood):
         password = bytes(password, encoding="utf-8")
         salt = hashlib.sha256(name.encode()).digest()
         kdf = PBKDF2HMAC(
@@ -90,8 +91,8 @@ class Database:
 
         try:
             sql = """ INSERT INTO entries
-                      (name, tg_id, date, time, message_text)
-                      VALUES (?, ?, ?, ?, ?);"""
+                      (name, tg_id, date, time, message_text, mood)
+                      VALUES (?, ?, ?, ?, ?, ?);"""
             conn = self.conn()
             cur = conn.cursor()
             cur.execute(
@@ -102,6 +103,7 @@ class Database:
                     dt.datetime.now().strftime("%Y-%m-%d"),
                     dt.datetime.now().strftime("%H:%M"),
                     enc_message,
+                    mood,
                 ),
             )
             conn.commit()
@@ -127,7 +129,7 @@ class Database:
             cur = conn.cursor()
 
             sql = """
-                SELECT date, message_text
+                SELECT date, message_text, time, mood
                 FROM entries
                 WHERE tg_id=?
                 ORDER BY id DESC
@@ -137,9 +139,9 @@ class Database:
             result = []
             data = cur.fetchall()
             for r in data:
-                date, enc_message = r
+                date, enc_message, msg_time, mood = r
                 msg = fernet.decrypt(enc_message).decode("utf-8")
-                result.append((date, msg))
+                result.append((date, msg, msg_time, mood))
             conn.close()
 
             return result
@@ -212,7 +214,7 @@ class Database:
             cur = conn.cursor()
 
             sql = """
-                    SELECT date, message_text
+                    SELECT date, message_text, time, mood
                     FROM entries
                     WHERE (tg_id=?)
                     AND (date BETWEEN ? AND ?)
@@ -222,9 +224,9 @@ class Database:
             result = []
             data = cur.fetchall()
             for r in data:
-                date, enc_message = r
+                date, enc_message, msg_time, mood = r
                 msg = fernet.decrypt(enc_message).decode("utf-8")
-                result.append((date, msg))
+                result.append((date, msg, msg_time, mood))
             conn.close()
 
             return result

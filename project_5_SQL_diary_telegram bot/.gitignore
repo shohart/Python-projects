@@ -1,3 +1,4 @@
 .venv
 sql_diary.db
 config.ini
+/__pycache__
