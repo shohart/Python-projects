@@ -32,7 +32,7 @@ This is a telegram bot that helps users keep a daily diary by writing entries an
 3. Run the bot using:
 
    ```sh
-   python bot.py
+   python telegram_bot.py
    ```
 
 ## Bot commands
