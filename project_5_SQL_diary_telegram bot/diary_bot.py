@@ -409,10 +409,10 @@ async def process_read_period(message: types.Message, state: FSMContext):
                 await bot.send_message(
                     message.chat.id,
                     md.text(
-                        md.text("On", date, md.bold(user_name), "wrote:"),
+                        md.text("On", date, md.bold(user_name), "wrote:\n"),
                         md.text(msg),
                         md.text(
-                            "Time:",
+                            "\nTime:",
                             md.bold(msg_time) + ".",
                             "Mood:",
                             md.bold(mood) + ".",
@@ -455,10 +455,10 @@ async def process_custom_period(message: types.Message, state: FSMContext):
             await bot.send_message(
                 message.chat.id,
                 md.text(
-                    md.text("On", date, md.bold(user_name), "wrote:"),
+                    md.text("On", date, md.bold(user_name), "wrote:\n"),
                     md.text(msg),
                     md.text(
-                        "Time:", md.bold(msg_time) + ".", "Mood:", md.bold(mood) + "."
+                        "\nTime:", md.bold(msg_time) + ".", "Mood:", md.bold(mood) + "."
                     ),
                     sep="\n",
                 ),
