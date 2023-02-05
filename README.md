@@ -21,3 +21,7 @@ This game is used to find a random number in a minimum number of tries possible.
 This game is a student project written in Python for an online course on Udemy.com. This game utilizes classes and functions to create a full-fledged Black Jack game.
 
 The goal of the game is to beat the dealer's hand without going over 21. In the game, face cards (Kings, Queens, and Jacks) are all worth 10 and Aces can be worth 1 or 11.
+
+[Project 5: Telegram Diary bot](https://github.com/shohart/Python-projects/tree/master/project_5_SQL_diary_telegram%20bot)
+
+This is a telegram bot that helps users keep a daily diary by writing entries and viewing previous entries, all stored in an SQL database. The bot uses the python [aiogram](https://docs.aiogram.io/en/latest/index.html) library for the telegram bot API. Bot encrypts messages in database using password, provided by user.
