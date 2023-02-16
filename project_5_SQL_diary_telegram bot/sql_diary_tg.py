@@ -111,6 +111,25 @@ class Database:
         except Error as e:
             print(e)
 
+    def remove_user(self, username):
+        try:
+            sql1 = """
+                DELETE FROM entries
+                WHERE tg_id = ?;
+            """
+            sql2 = """
+                DELETE FROM users
+                WHERE tg_id = ?;
+            """
+            conn = self.conn()
+            cur = conn.cursor()
+            cur.execute(sql1, (username,))
+            cur.execute(sql2, (username,))
+            conn.commit()
+            conn.close()
+        except Error as e:
+            print(e)
+
     def show_prev_entry(self, name, tg_id, password, limit=1, offset=0):
 
         password = bytes(password, encoding="utf-8")
@@ -223,13 +242,31 @@ class Database:
             cur.execute(sql, (tg_id, begin, end))
             result = []
             data = cur.fetchall()
-            for r in data:
-                date, enc_message, msg_time, mood = r
+            for date, enc_message, msg_time, mood in data:
                 msg = fernet.decrypt(enc_message).decode("utf-8")
                 result.append((date, msg, msg_time, mood))
             conn.close()
 
             return result
+
+        except Error as e:
+            print(e)
+
+    def get_user_bithdate(self, tg_id):
+        try:
+            conn = self.conn()
+            cur = conn.cursor()
+
+            sql = """
+                    SELECT birth_year
+                    FROM users
+                    WHERE (tg_id=?)
+                ;"""
+            cur.execute(sql, (tg_id,))
+            data = cur.fetchone()[0]
+            conn.close()
+
+            return data
 
         except Error as e:
             print(e)

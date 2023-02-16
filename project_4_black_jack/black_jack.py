@@ -418,7 +418,11 @@ class Chips:
         while True:
             amount = input("\nPlace a bet! Enter the amount (minimum bet is 2): ")
 
-            if not amount.isdigit() or amount == "0":
+            if amount == "":
+                amount = 2
+                break
+
+            elif not amount.isdigit() or amount == "0":
                 print("\nSorry that is not a valid bet!")
                 continue
 
@@ -742,7 +746,7 @@ while True:
                 raise NameError("Unknown situation!")
 
         # Ask to play again
-        if player.chips.bank == 0:
+        if player.chips.bank < 2:
             print("\nYour bank is empty!")
             player.chips.add_funds()
 
