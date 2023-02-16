@@ -53,7 +53,7 @@ buttons_dict = {
     "one": ("1️⃣", "1"),
     "five": ("5️⃣", "5"),
     "ten": ("🔟", "10"),
-    "custom": ("📆 Custom period", "custom"),
+    "custom": ("📆 Period", "custom"),
     "mood0": ("😭 Don't ask", "Don't ask"),
     "mood1": ("😥 Sad", "Sad"),
     "mood2": ("😐 Will do", "Will do"),
@@ -61,7 +61,7 @@ buttons_dict = {
     "mood4": ("🤩 Amazing!", "Amazing!"),
     "delete": ("☠️ Yes, DELETE!", "delete"),
     "approve": ("👌 Ok", "ok"),
-    "hist": ("📄 Single previous", "prev"),
+    "hist": ("📄 Single", "prev"),
     "back": ("⬅️ Previous", "back"),
     "next": ("➡️ Next", "next"),
 }
@@ -87,34 +87,47 @@ def create_keeb(*rows):
     return keeb
 
 
-def process_message(date, msg, msg_time, mood, chat_id, user_name):
-    """A function to process diary entry
+def text_format(date, msg, msg_time, mood, user_name):
+    """A function to format text
 
     Args:
         date (_type_): Date of the entry
         msg (_type_): Entry's body
         msg_time (_type_): Time of the entry
         mood (_type_): Mood of the entry
-        chat_id (_type_): id of a chat to where send a message
         user_name (_type_): name of the user od a diary
+
+    Returns:
+        str: A formatted text, containing all the data.
+    """
+    date_formatted = dt.datetime.strptime(date, "%Y-%m-%d").strftime("%d %B %Y")
+    return md.text(
+        md.text("On", md.bold(date_formatted), ", ", md.code(user_name), "wrote:\n"),
+        md.text(msg),
+        md.text(
+            "\nTime:",
+            md.bold(msg_time) + ".",
+            "Mood:",
+            md.bold(mood) + ".",
+        ),
+        sep="\n",
+    )
+
+
+def process_message(text, chat_id, replmk=None):
+    """A function to process diary entry
+
+    Args:
+        chat_id (_type_): id of a chat to where send a message
+        replymk (_type_): keyboard markup
 
     Returns:
         bot message: A formatted message, containing all the data.
     """
     return bot.send_message(
         chat_id,
-        md.text(
-            md.text("On", date, md.bold(user_name), "wrote:\n"),
-            md.text(msg),
-            md.text(
-                "\nTime:",
-                md.bold(msg_time) + ".",
-                "Mood:",
-                md.bold(mood) + ".",
-            ),
-            sep="\n",
-        ),
-        # reply_markup=kb_main,
+        text,
+        reply_markup=replmk,
         parse_mode=ParseMode.MARKDOWN,
     )
 
@@ -146,9 +159,7 @@ kb_gender = create_keeb(
     (buttons_dict["cancel"],),
 )
 kb_read = create_keeb(
-    (buttons_dict["hist"],),
-    (buttons_dict["one"], buttons_dict["five"], buttons_dict["ten"]),
-    (buttons_dict["custom"],),
+    (buttons_dict["hist"], buttons_dict["custom"]),
     (buttons_dict["cancel"],),
 )
 kb_mood = create_keeb(
@@ -161,6 +172,7 @@ kb_del = create_keeb((buttons_dict["delete"], buttons_dict["cancel"]))
 kb_list = create_keeb(
     (buttons_dict["back"], buttons_dict["next"]), (buttons_dict["cancel"],)
 )
+kb_list_start = create_keeb((buttons_dict["back"], buttons_dict["cancel"]))
 
 # initialize calendar
 inline_calendar = InlineCalendar()
@@ -182,7 +194,7 @@ class WriteStates(StatesGroup):
 
 class ReadStates(StatesGroup):
     password = State()
-    read_entry = State()
+    read_entry_num = State()
     custom_start = State()
     custom_end = State()
     custom_display = State()
@@ -322,7 +334,9 @@ async def process_callback_query(
             else:
 
                 for date, msg, msg_time, mood in diary_data:
-                    await process_message(date, msg, msg_time, mood, chat_id, user_name)
+                    await process_message(
+                        text_format(date, msg, msg_time, mood, user_name), chat_id
+                    )
 
             await ask_proceed(chat_id)
 
@@ -355,7 +369,9 @@ async def process_callback_query(
             )
 
             for date, msg, msg_time, mood in diary_data:
-                await process_message(date, msg, msg_time, mood, chat_id, user_name)
+                await process_message(
+                    text_format(date, msg, msg_time, mood, user_name), chat_id
+                )
 
         await ask_proceed(chat_id)
 
@@ -363,11 +379,16 @@ async def process_callback_query(
         await state.finish()
 
     elif data == "prev":
-        await bot.answer_callback_query(callback_query.id)
-        offset = 0
+        await ReadStates.read_entry_num.set()
         async with state.proxy() as storage_data:
+            storage_data["read_entry_num"] = 0
+
             diary_data = db.show_prev_entry(
-                user_full_name, user_id, storage_data["password"], 1, offset=offset
+                user_full_name,
+                user_id,
+                storage_data["password"],
+                1,
+                offset=storage_data["read_entry_num"],
             )
 
             if not diary_data:
@@ -377,9 +398,43 @@ async def process_callback_query(
 
             else:
                 for date, msg, msg_time, mood in diary_data:
-                    await process_message(date, msg, msg_time, mood, chat_id, user_name)
+                    await process_message(
+                        text_format(date, msg, msg_time, mood, user_name),
+                        chat_id,
+                        kb_list_start,
+                    )
 
-                await ask_proceed(chat_id)
+    elif data in ["back", "next"]:
+        await bot.answer_callback_query(callback_query.id)
+        message_id = callback_query.message.message_id
+        async with state.proxy() as storage_data:
+            if data == "back":
+                storage_data["read_entry_num"] += 1
+            else:
+                storage_data["read_entry_num"] -= 1
+
+            diary_data = db.show_prev_entry(
+                user_full_name,
+                user_id,
+                storage_data["password"],
+                1,
+                offset=storage_data["read_entry_num"],
+            )
+            if not diary_data:
+                await bot.send_message(
+                    chat_id, "You have no messages to view!", reply_markup=kb_main
+                )
+
+            else:
+                for date, msg, msg_time, mood in diary_data:
+                    edit_msg = text_format(date, msg, msg_time, mood, user_name)
+                await bot.edit_message_text(
+                    text=edit_msg,
+                    chat_id=chat_id,
+                    message_id=message_id,
+                    reply_markup=kb_list,
+                    parse_mode=ParseMode.MARKDOWN,
+                )
 
 
 # Handling choosing start date for custom calendar
@@ -721,39 +776,6 @@ async def process_new_entry(message: types.Message, state: FSMContext):
         parse_mode=ParseMode.MARKDOWN,
     )
     await state.finish()
-
-
-# # Process custom entered period (deprecated)
-# @dp.message_handler(state=ReadStates.custom_display)
-# async def process_custom_period(message: types.Message, state: FSMContext):
-#     user_id = message.from_user.id
-#     user_full_name = message.from_user.full_name
-#     user_name = message.from_user.first_name
-
-#     async with state.proxy() as storage_data:
-#         begin, end = storage_data["custom_start"], storage_data["custom_end"]
-#         diary_data = db.show_entries_range(
-#             user_full_name, user_id, storage_data["password"], begin, end
-#         )
-
-#         for date, msg, msg_time, mood in diary_data:
-#             await bot.send_message(
-#                 message.chat.id,
-#                 md.text(
-#                     md.text("On", date, md.bold(user_name), "wrote:\n"),
-#                     md.text(msg),
-#                     md.text(
-#                         "\nTime:", md.bold(msg_time) + ".", "Mood:", md.bold(mood)
-#                     ),
-#                     sep="\n",
-#                 ),
-#                 # reply_markup=kb_main,
-#                 parse_mode=ParseMode.MARKDOWN,
-#             )
-
-#     await ask_proceed(chat_id)
-#     # Finish conversation
-#     await state.finish()
 
 
 if __name__ == "__main__":

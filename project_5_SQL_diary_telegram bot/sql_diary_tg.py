@@ -233,10 +233,10 @@ class Database:
             cur = conn.cursor()
 
             sql = """
-                    SELECT date, message_text, time, mood
+                    SELECT DISTINCT date, message_text, time, mood
                     FROM entries
                     WHERE (tg_id=?)
-                    AND (date BETWEEN ? AND ?)
+                    AND date BETWEEN ? AND ?
                     ORDER BY id DESC
                 ;"""
             cur.execute(sql, (tg_id, begin, end))
