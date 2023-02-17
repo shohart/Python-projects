@@ -705,8 +705,8 @@ async def process_gender(message: types.Message, state: FSMContext):
 
 # Check if email is of valid value
 @dp.message_handler(
-    lambda email: bool(
-        re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)
+    lambda msg: bool(
+        re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", msg.text)
     ),
     state=Form.email,
 )
