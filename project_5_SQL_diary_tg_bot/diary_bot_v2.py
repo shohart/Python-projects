@@ -58,7 +58,7 @@ buttons_dict = {
     "mood1": ("😥 Sad", "Sad"),
     "mood2": ("😐 Will do", "Will do"),
     "mood3": ("😊 Happy", "Happy"),
-    "mood4": ("🤩 Amazing!", "Amazing!"),
+    "mood4": ("🤩 Amazing!", "Amazing"),
     "delete": ("☠️ Yes, DELETE!", "delete"),
     "approve": ("👌 Ok", "ok"),
     "hist": ("📄 Single", "prev"),
@@ -149,7 +149,7 @@ def ask_proceed(chat_id):
 
 
 # creating keyboards
-kb_reg = create_keeb((buttons_dict["reg"], buttons_dict["cancel"]))
+kb_reg = create_keeb((buttons_dict["reg"],))
 kb_main = create_keeb((buttons_dict["add"], buttons_dict["view"]))
 kb_cancel = create_keeb((buttons_dict["cancel"],))
 kb_approve = create_keeb((buttons_dict["approve"], buttons_dict["cancel"]))
@@ -302,7 +302,7 @@ async def process_callback_query(
                 chat_id, "Please enter your email.", reply_markup=kb_cancel
             )
 
-    elif data in ["Don't ask", "Sad", "Will do", "Happy", "Amazing!"]:
+    elif data in ["Don't ask", "Sad", "Will do", "Happy", "Amazing"]:
         async with state.proxy() as storage_data:
             storage_data["mood"] = data
             await bot.send_message(
