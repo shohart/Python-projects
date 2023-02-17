@@ -282,11 +282,7 @@ async def process_callback_query(
 
         if db.check_user(user_id):
             await ReadStates.password.set()
-            await bot.send_message(
-                chat_id,
-                "Enter your password.",
-                reply_markup=kb_cancel,
-            )
+            await ask_password(chat_id)
         else:
             await not_registered(chat_id)
 
