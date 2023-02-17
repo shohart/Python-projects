@@ -702,7 +702,7 @@ async def process_email(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     user_full_name = message.from_user.full_name
     user_name = message.from_user.first_name
-    cur_year = int(dt.now().strftime("%Y"))
+    cur_year = int(dt.datetime.now().strftime("%Y"))
     async with state.proxy() as data:
 
         data["email"] = message.text
