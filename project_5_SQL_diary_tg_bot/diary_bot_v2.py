@@ -420,14 +420,18 @@ async def process_callback_query(
                 1,
                 offset=storage_data["read_entry_num"],
             )
+
+            if storage_data["read_entry_num"] == 0:
+                repl_kbd = kb_list_start
+
+            else:
+                repl_kbd = kb_list
+
             if not diary_data:
                 await bot.send_message(
-                    chat_id, "You have no messages to view!", reply_markup=kb_read
-                )
-
-            elif storage_data["read_entry_num"] < 0:
-                await bot.send_message(
-                    chat_id, "No newer messages!", reply_markup=kb_read
+                    chat_id,
+                    "You have no messages to view for selected period!",
+                    reply_markup=kb_read,
                 )
 
             else:
@@ -437,7 +441,7 @@ async def process_callback_query(
                     text=edit_msg,
                     chat_id=chat_id,
                     message_id=message_id,
-                    reply_markup=kb_list,
+                    reply_markup=repl_kbd,
                     parse_mode=ParseMode.MARKDOWN,
                 )
 
