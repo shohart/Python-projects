@@ -146,6 +146,13 @@ def ask_proceed(chat_id):
     )
 
 
+def incorrect_password(message):
+    return message.reply(
+        "Password is incorrect! Please enter correct password.",
+        reply_markup=kb_cancel,
+    )
+
+
 # creating keyboards
 kb_reg = create_keeb((buttons_dict["reg"],))
 kb_main = create_keeb((buttons_dict["add"], buttons_dict["view"]))
@@ -609,10 +616,7 @@ async def del_process_password(message: types.Message, state: FSMContext):
                 parse_mode=ParseMode.MARKDOWN,
             )
         else:
-            await message.reply(
-                "Password is incorrect! Please enter correct password.",
-                reply_markup=kb_cancel,
-            )
+            await incorrect_password(message)
 
 
 # Process password fro state "new message"
@@ -631,10 +635,7 @@ async def process_password_msg(message: types.Message, state: FSMContext):
             message.chat.id, "What is your mood?", reply_markup=kb_mood
         )
     else:
-        await message.reply(
-            "Password is incorrect! Please enter correct password.",
-            reply_markup=kb_cancel,
-        )
+        await incorrect_password(message)
 
 
 # process password for Read state
@@ -656,11 +657,7 @@ async def process_password_read(message: types.Message, state: FSMContext):
         )
         await ReadStates.next()
     else:
-        await bot.send_message(
-            message.chat.id,
-            "Password is incorrect! Please enter correct password.",
-            reply_markup=kb_cancel,
-        )
+        await incorrect_password(message)
 
 
 # Check age. Age gotta be digit
