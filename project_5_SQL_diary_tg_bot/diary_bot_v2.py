@@ -1,5 +1,6 @@
 import time
 import os
+import re
 import configparser
 import logging
 import datetime as dt
@@ -700,6 +701,22 @@ async def process_gender(message: types.Message, state: FSMContext):
         await bot.send_message(
             message.chat.id, "Please enter your email.", reply_markup=kb_cancel
         )
+
+
+# Check if email is of valid value
+@dp.message_handler(
+    lambda email: bool(
+        re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email)
+    ),
+    state=Form.email,
+)
+async def process_email_invalid(message: types.Message, state: FSMContext):
+    """
+    Process invalid email entry
+    """
+    return await message.reply(
+        "This is not a valid email address! Please enter a correct one"
+    )
 
 
 # Process user-input email

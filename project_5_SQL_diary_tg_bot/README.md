@@ -11,11 +11,29 @@ This is a telegram bot that helps users keep a daily diary by writing entries an
 ## Requirements
 
 - Python 3.7+
-- aiogram
-- configparser
-- logging
-- datetime
-- os
+- aiogram 2.24
+- aiohttp 3.8.3
+- aiosignal 1.3.1
+- async-timeout 4.0.2
+- attrs 22.2.0
+- Babel 2.9.1
+- bcrypt 4.0.1
+- certifi 2022.12.7
+- cffi 1.15.1
+- charset-normalizer 2.1.1
+- cryptography 39.0.0
+- frozenlist 1.3.3
+- idna 3.4
+- magic-filter 1.0.9
+- multidict 6.0.4
+- passlib 1.7.4
+- pycparser 2.21
+- python-dateutil 2.8.2
+- pytz 2022.7.1
+- requests 2.28.2
+- six 1.16.0
+- urllib3 1.26.14
+- yarl 1.8.2
 
 ## How to run
 
@@ -37,10 +55,7 @@ This is a telegram bot that helps users keep a daily diary by writing entries an
 ## Bot commands
 
 - **/start** - start the bot and either register or choose an action if already registered
-- **/register** - register with the bot
-- **/cancel** - cancel any action
-- **/add_entry** - add a new diary entry
-- **/view_previous** - view previous diary entries
+- **/delete_user** - delete current user account with all the data.
 
 ## Notes
 
