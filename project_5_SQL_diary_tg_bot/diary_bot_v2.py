@@ -51,9 +51,6 @@ buttons_dict = {
     "male": ("👨‍🦰 Male", "Male"),
     "female": ("👩‍🦰 Female", "Female"),
     "other": ("🤖👩‍🎤👨‍🎤 Other", "Other"),
-    "one": ("1️⃣", "1"),
-    "five": ("5️⃣", "5"),
-    "ten": ("🔟", "10"),
     "custom": ("📆 Period", "custom"),
     "mood0": ("😭 Don't ask", "Don't ask"),
     "mood1": ("😥 Sad", "Sad"),
@@ -229,7 +226,7 @@ async def process_callback_query(
 
     if data == "reg":
 
-        if not db.check_user(user_full_name):
+        if not db.check_user(user_id):
             # Set password
             await Form.password.set()
             await bot.send_message(
@@ -239,6 +236,12 @@ async def process_callback_query(
             )
             logging.info(
                 f"{user_id} {user_full_name} {time.asctime()} started registration."
+            )
+        else:
+            await bot.send_message(
+                chat_id,
+                "You are already registered!",
+                reply_markup=kb_main,
             )
 
     elif data == "add":
@@ -288,7 +291,7 @@ async def process_callback_query(
         await state.finish()
         # And remove keyboard (just in case)
 
-        if not db.check_user(user_full_name):
+        if not db.check_user(user_id):
             await bot.send_message(
                 chat_id,
                 "Cancelled.",
@@ -326,31 +329,11 @@ async def process_callback_query(
             "Your account has been DELETED. You can register again.",
             reply_markup=kb_reg,
         )
+        logging.info(
+            f"{user_id} {user_full_name} {time.asctime()} successfully deleted account."
+        )
         # Finish conversation
         await state.finish()
-
-    elif data in ["1", "5", "10"]:
-        async with state.proxy() as storage_data:
-            diary_data = db.show_prev_entry(
-                user_full_name, user_id, storage_data["password"], int(data), offset=0
-            )
-
-            if not diary_data:
-                await bot.send_message(
-                    chat_id, "You have no messages to view!", reply_markup=kb_main
-                )
-
-            else:
-
-                for date, msg, msg_time, mood in diary_data:
-                    await process_message(
-                        text_format(date, msg, msg_time, mood, user_name), chat_id
-                    )
-
-            await ask_proceed(chat_id)
-
-            # Finish conversation
-            await state.finish()
 
     elif data == "custom":
 
