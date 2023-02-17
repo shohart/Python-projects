@@ -277,7 +277,7 @@ async def process_callback_query(
 
         if current_state is None:
             return
-        
+
         logging.info(
             "{} {} at {} cancelled state {}".format(
                 user_id, user_full_name, time.asctime(), current_state
@@ -583,7 +583,11 @@ async def reg_process_password(message: types.Message, state: FSMContext):
         data["password"] = message.text
 
     await Form.next()
-    await bot.send_message(message.chat.id, "What year were you born?")
+    await bot.send_message(
+        message.chat.id,
+        "What year were you born?",
+        reply_markup=kb_cancel,
+    )
 
 
 # Process password for user_delete state
