@@ -277,7 +277,7 @@ async def process_callback_query(
 
         if current_state is None:
             return
-
+        
         logging.info(
             "{} {} at {} cancelled state {}".format(
                 user_id, user_full_name, time.asctime(), current_state
@@ -287,11 +287,19 @@ async def process_callback_query(
         # Cancel state and inform user about it
         await state.finish()
         # And remove keyboard (just in case)
-        await bot.send_message(
-            chat_id,
-            "Cancelled. Choose an option:",
-            reply_markup=kb_main,
-        )
+
+        if not db.check_user(user_full_name):
+            await bot.send_message(
+                chat_id,
+                "Cancelled.",
+                reply_markup=kb_reg,
+            )
+        else:
+            await bot.send_message(
+                chat_id,
+                "Cancelled. Choose an option:",
+                reply_markup=kb_main,
+            )
 
     elif data in ["Male", "Female", "Other"]:
         async with state.proxy() as storage_data:
@@ -715,7 +723,7 @@ async def process_email_invalid(message: types.Message, state: FSMContext):
     Process invalid email entry
     """
     return await message.reply(
-        "This is not a valid email address! Please enter a correct one"
+        "This is not a valid email address! Please enter a correct one."
     )
 
 
