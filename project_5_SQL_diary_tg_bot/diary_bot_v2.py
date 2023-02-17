@@ -422,7 +422,12 @@ async def process_callback_query(
             )
             if not diary_data:
                 await bot.send_message(
-                    chat_id, "You have no messages to view!", reply_markup=kb_main
+                    chat_id, "You have no messages to view!", reply_markup=kb_read
+                )
+
+            elif storage_data["read_entry_num"] < 0:
+                await bot.send_message(
+                    chat_id, "No newer messages!", reply_markup=kb_read
                 )
 
             else:
