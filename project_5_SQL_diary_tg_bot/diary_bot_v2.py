@@ -156,6 +156,22 @@ def incorrect_password(message):
     )
 
 
+def not_registered(chat_id):
+    return bot.send_message(
+        chat_id,
+        "You need to register!",
+        reply_markup=kb_reg,
+    )
+
+
+def ask_password(chat_id):
+    return bot.send_message(
+        chat_id,
+        "Enter your password:",
+        reply_markup=kb_cancel,
+    )
+
+
 # creating keyboards
 kb_reg = create_keeb((buttons_dict["reg"],))
 kb_main = create_keeb((buttons_dict["add"], buttons_dict["view"]))
@@ -239,11 +255,7 @@ async def process_callback_query(
         if not db.check_user(user_id):
             # Set password
             await Form.password.set()
-            await bot.send_message(
-                chat_id,
-                "Enter your password:",
-                reply_markup=kb_cancel,
-            )
+            await ask_password(chat_id)
             logging.info(
                 f"{user_id} {user_full_name} {time.asctime()} started registration."
             )
@@ -264,11 +276,7 @@ async def process_callback_query(
                 reply_markup=kb_cancel,
             )
         else:
-            await bot.send_message(
-                chat_id,
-                "You need to register!",
-                reply_markup=kb_reg,
-            )
+            await not_registered(chat_id)
 
     elif data == "view":
 
@@ -280,11 +288,7 @@ async def process_callback_query(
                 reply_markup=kb_cancel,
             )
         else:
-            await bot.send_message(
-                chat_id,
-                "You need to register!",
-                reply_markup=kb_reg,
-            )
+            await not_registered(chat_id)
 
     elif data == "cancel":
 
@@ -530,7 +534,7 @@ async def start_handler(message: types.Message):
     if not db.check_user(user_id):
         await bot.send_message(
             message.chat.id,
-            f"Hello, {user_full_name}! You need to register!",
+            f"Welcome, {user_full_name}! You need to register!",
             reply_markup=kb_reg,
         )
     else:
@@ -552,18 +556,10 @@ async def delete_user_handler(message: types.Message):
     )
 
     if not db.check_user(user_id):
-        await bot.send_message(
-            message.chat.id,
-            f"Whoa, {user_full_name}! You are not registered!",
-            reply_markup=kb_reg,
-        )
+        await not_registered(chat_id)
     else:
         await DeleteAcStates.password.set()
-        await bot.send_message(
-            chat_id,
-            "Enter your password:",
-            reply_markup=kb_cancel,
-        )
+        await ask_password(chat_id)
 
 
 # Handling registration
