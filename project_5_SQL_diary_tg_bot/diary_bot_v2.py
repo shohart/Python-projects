@@ -147,6 +147,9 @@ def ask_proceed(chat_id):
 
 
 def incorrect_password(message):
+    """
+    Reply for an incorrect password
+    """
     return message.reply(
         "Password is incorrect! Please enter correct password.",
         reply_markup=kb_cancel,
