@@ -8,6 +8,8 @@
 
 This is a telegram bot that helps users keep a daily diary by writing entries and viewing previous entries, all stored in an SQL database. The bot uses the python [aiogram](https://docs.aiogram.io/en/latest/index.html) library for the telegram bot API. Bot encrypts messages in database using password, provided by user.
 
+It uses inline calendar library form this [repo](https://github.com/Birdi7/Inline-calendar-for-telegram).
+
 ## Requirements
 
 - Python 3.7+
