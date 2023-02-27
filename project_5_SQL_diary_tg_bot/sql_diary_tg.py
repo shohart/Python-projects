@@ -27,6 +27,7 @@ class Database:
                             time text,
                             message_text text,
                             mood text,
+                            timestamp,
                             UNIQUE(id, name, date)
                         ); """,
             """ CREATE TABLE IF NOT EXISTS users (
@@ -37,6 +38,8 @@ class Database:
                             gender text,
                             email text,
                             password text,
+                            registered,
+                            last_login,
                             UNIQUE(id, name, email)
                         ); """,
         ]
@@ -63,14 +66,23 @@ class Database:
 
         hasher = bcrypt.using(rounds=13)
         password = hasher.hash(password)
+        cur_date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         try:
-            sql = """ INSERT INTO users
-                      (name, birth_year, email, password, tg_id, gender)
-                      VALUES (?, ?, ?, ?, ?, ?);"""
+            sql = """
+            INSERT INTO users (
+                    name, birth_year, email, password,
+                    tg_id, gender, registered, last_login
+                )
+                VALUES (
+                    ?, ?, ?, ?, ?, ?, ?
+                );"""
             conn = self.conn()
             cur = conn.cursor()
-            cur.execute(sql, (name, birth_year, email, password, tg_id, gender))
+            cur.execute(
+                sql,
+                (name, birth_year, email, password, tg_id, gender, cur_date, cur_date),
+            )
             conn.commit()
             conn.close()
         except Error as e:
@@ -88,11 +100,13 @@ class Database:
         key = base64.urlsafe_b64encode(kdf.derive(password))
         fernet = Fernet(key)
         enc_message = fernet.encrypt(bytes(message, encoding="utf-8"))
+        cur_date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         try:
             sql = """ INSERT INTO entries
-                      (name, tg_id, date, time, message_text, mood)
+                      (name, tg_id, date, time, message_text, mood, timestamp)
                       VALUES (?, ?, ?, ?, ?, ?);"""
+
             conn = self.conn()
             cur = conn.cursor()
             cur.execute(
@@ -104,6 +118,7 @@ class Database:
                     dt.datetime.now().strftime("%H:%M"),
                     enc_message,
                     mood,
+                    cur_date,
                 ),
             )
             conn.commit()
@@ -148,9 +163,9 @@ class Database:
             cur = conn.cursor()
 
             sql = """
-                SELECT date, message_text, time, mood
+                SELECT date(timestamp), message_text, STRFTIME('%H:%M', timestamp), mood
                 FROM entries
-                WHERE tg_id=?
+                WHERE tg_id = ?
                 ORDER BY id DESC
                 LIMIT ?
                 OFFSET ?;"""
@@ -184,6 +199,7 @@ class Database:
 
     def check_password(self, tg_id, password):
         hasher = bcrypt.using(rounds=13)
+        cur_date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
             sql = """SELECT password FROM
                      users WHERE tg_id = ?;
@@ -196,8 +212,14 @@ class Database:
         except Error as e:
             print(e)
 
+        # Verify user and update last_login state
+        verified = hasher.verify(password, result_to_verify)
+        if verified:
+            sql2 = """ UPDATE users SET last_login = ? WHERE tg_id = ? """
+            cur.execute(sql2, cur_date, tg_id)
+
         # Return True if the input value was found, False otherwise
-        return hasher.verify(password, result_to_verify)
+        return verified
 
     def get_password_hash(self, tg_id):
         try:
@@ -233,9 +255,13 @@ class Database:
             cur = conn.cursor()
 
             sql = """
-                    SELECT DISTINCT date, message_text, time, mood
+                    SELECT
+                        date(timestamp),
+                        message_text,
+                        STRFTIME('%H:%M', timestamp),
+                        mood
                     FROM entries
-                    WHERE (tg_id=?)
+                    WHERE tg_id = ?
                     AND date BETWEEN ? AND ?
                     ORDER BY id DESC
                 ;"""
@@ -260,7 +286,7 @@ class Database:
             sql = """
                     SELECT birth_year
                     FROM users
-                    WHERE (tg_id=?)
+                    WHERE tg_id = ?
                 ;"""
             cur.execute(sql, (tg_id,))
             data = cur.fetchone()[0]
