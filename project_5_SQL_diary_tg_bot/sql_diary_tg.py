@@ -75,7 +75,7 @@ class Database:
                     tg_id, gender, registered, last_login
                 )
                 VALUES (
-                    ?, ?, ?, ?, ?, ?, ?
+                    ?, ?, ?, ?, ?, ?, ?, ?
                 );"""
             conn = self.conn()
             cur = conn.cursor()
@@ -105,7 +105,7 @@ class Database:
         try:
             sql = """ INSERT INTO entries
                       (name, tg_id, date, time, message_text, mood, timestamp)
-                      VALUES (?, ?, ?, ?, ?, ?);"""
+                      VALUES (?, ?, ?, ?, ?, ?, ?);"""
 
             conn = self.conn()
             cur = conn.cursor()
