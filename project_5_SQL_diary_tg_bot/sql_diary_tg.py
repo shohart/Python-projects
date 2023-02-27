@@ -219,6 +219,7 @@ class Database:
             conn = self.conn()
             cur = conn.cursor()
             cur.execute(sql2, (cur_date, tg_id))
+            conn.commit()
             conn.close()
 
         # Return True if the input value was found, False otherwise
