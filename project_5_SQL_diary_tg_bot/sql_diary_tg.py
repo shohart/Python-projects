@@ -216,7 +216,10 @@ class Database:
         verified = hasher.verify(password, result_to_verify)
         if verified:
             sql2 = """ UPDATE users SET last_login = ? WHERE tg_id = ? """
+            conn = self.conn()
+            cur = conn.cursor()
             cur.execute(sql2, (cur_date, tg_id))
+            conn.close()
 
         # Return True if the input value was found, False otherwise
         return verified
