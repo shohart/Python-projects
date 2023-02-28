@@ -385,13 +385,24 @@ async def process_callback_query(
         async with state.proxy() as storage_data:
             storage_data["read_entry_num"] = 0
 
-            diary_data = db.show_prev_entry(
-                user_full_name,
-                user_id,
-                storage_data["password"],
-                1,
-                offset=storage_data["read_entry_num"],
-            )
+            try:
+                diary_data = db.show_prev_entry(
+                    user_full_name,
+                    user_id,
+                    storage_data["password"],
+                    1,
+                    offset=storage_data["read_entry_num"],
+                )
+            except KeyError():
+                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+
+                # Finish conversation
+                await state.finish()
+
+                await ask_proceed(chat_id)
+
+                # Finish conversation
+                await state.finish()
 
             if not diary_data:
                 await bot.send_message(
@@ -415,13 +426,25 @@ async def process_callback_query(
             else:
                 storage_data["read_entry_num"] -= 1
 
-            diary_data = db.show_prev_entry(
-                user_full_name,
-                user_id,
-                storage_data["password"],
-                1,
-                offset=storage_data["read_entry_num"],
-            )
+            try:
+                diary_data = db.show_prev_entry(
+                    user_full_name,
+                    user_id,
+                    storage_data["password"],
+                    1,
+                    offset=storage_data["read_entry_num"],
+                )
+
+            except KeyError():
+                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+
+                # Finish conversation
+                await state.finish()
+
+                await ask_proceed(chat_id)
+
+                # Finish conversation
+                await state.finish()
 
             if storage_data["read_entry_num"] == 0:
                 repl_kbd = kb_list_start
@@ -488,6 +511,8 @@ async def end_date_calendar_callback_handler(
     chat_id = callback_query.message.chat.id
     user_id = callback_query.from_user.id
     message_id = callback_query.message.message_id
+    user_full_name = callback_query.from_user.full_name
+    user_name = callback_query.from_user.first_name
     await bot.answer_callback_query(callback_query.id)
 
     return_data = inline_calendar.handle_callback(user_id, callback_data)
@@ -501,23 +526,35 @@ async def end_date_calendar_callback_handler(
         picked_data = return_data
         async with state.proxy() as storage_data:
             storage_data["custom_end"] = picked_data
-            start = storage_data["custom_start"]
-            end = storage_data["custom_end"]
-        await ReadStates.custom_display.set()
-        await bot.send_message(
-            chat_id,
-            md.text(
-                md.text("You chose period:\n"),
-                md.text("From:\n") + "         " + md.bold(start.strftime("%d %B, %Y")),
-                md.text("To:\n")
-                + "         "
-                + md.bold(end.strftime("%d %B, %Y") + "\n"),
-                md.text("Is it correct?"),
-                sep="\n",
-            ),
-            parse_mode=ParseMode.MARKDOWN,
-            reply_markup=kb_approve,
-        )
+        # await ReadStates.custom_display.set()
+        async with state.proxy() as storage_data:
+            begin, end = storage_data["custom_start"], storage_data["custom_end"]
+
+            try:
+                diary_data = db.show_entries_range(
+                    user_full_name, user_id, storage_data["password"], begin, end
+                )
+
+            except KeyError():
+                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+
+                # Finish conversation
+                await state.finish()
+
+                await ask_proceed(chat_id)
+
+                # Finish conversation
+                await state.finish()
+
+            for date, msg, msg_time, mood in diary_data:
+                await process_message(
+                    text_format(date, msg, msg_time, mood, user_name), chat_id
+                )
+
+        await ask_proceed(chat_id)
+
+        # Finish conversation
+        await state.finish()
 
 
 # Handling of initial message
