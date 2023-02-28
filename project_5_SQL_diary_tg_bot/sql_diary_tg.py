@@ -23,8 +23,6 @@ class Database:
                             id integer PRIMARY KEY,
                             tg_id text,
                             name text NOT NULL,
-                            date text,
-                            time text,
                             message_text text,
                             mood text,
                             timestamp,
@@ -104,8 +102,8 @@ class Database:
 
         try:
             sql = """ INSERT INTO entries
-                      (name, tg_id, date, time, message_text, mood, timestamp)
-                      VALUES (?, ?, ?, ?, ?, ?, ?);"""
+                      (name, tg_id, message_text, mood, timestamp)
+                      VALUES (?, ?, ?, ?, ?);"""
 
             conn = self.conn()
             cur = conn.cursor()
@@ -114,8 +112,6 @@ class Database:
                 (
                     name,
                     tg_id,
-                    dt.datetime.now().strftime("%Y-%m-%d"),
-                    dt.datetime.now().strftime("%H:%M"),
                     enc_message,
                     mood,
                     cur_date,
