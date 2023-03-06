@@ -230,11 +230,8 @@ class DeleteAcStates(StatesGroup):
 
 # Handling keyboard events, using callback handlers
 @dp.callback_query_handler(
-    lambda call: call.data
-    in [
-        i[1]
-        for i in buttons_dict.values() and call.data not in ["Male", "Female", "Other"]
-    ],
+    lambda call: call.data in [i[1] for i in buttons_dict.values()]
+    and call.data not in ["Male", "Female", "Other"],
     state="*",
 )
 async def process_callback_query(
