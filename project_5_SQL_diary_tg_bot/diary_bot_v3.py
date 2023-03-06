@@ -316,32 +316,43 @@ async def process_callback_query(
 
     elif data in ["Male", "Female", "Other"]:
         async with state.proxy() as storage_data:
-            storage_data["gender"] = data
-            await Form.next()
+            try:
+                storage_data["gender"] = data
+                await Form.next()
 
-            # And send message
-            await bot.send_message(
-                chat_id, "Please enter your email.", reply_markup=kb_cancel
-            )
+                # And send message
+                await bot.send_message(
+                    chat_id, "Please enter your email.", reply_markup=kb_cancel
+                )
+            except KeyError():
+                await bot.send_message(chat_id, "Error acquired.")
+                await state.finish()
 
     elif data in ["Don't ask", "Sad", "Will do", "Happy", "Amazing"]:
         async with state.proxy() as storage_data:
-            storage_data["mood"] = data
-            await bot.send_message(
-                chat_id, "Enter your message.", reply_markup=kb_cancel
-            )
-        await WriteStates.next()
+            try:
+                storage_data["mood"] = data
+                await bot.send_message(
+                    chat_id, "Enter your message.", reply_markup=kb_cancel
+                )
+                await WriteStates.next()
+            except KeyError():
+                await bot.send_message(chat_id, "Error acquired.")
+                await state.finish()
 
     elif data == "delete":
-        db.remove_user(user_id)
-        await bot.send_message(
-            chat_id,
-            "Your account has been DELETED. You can register again.",
-            reply_markup=kb_reg,
-        )
-        logging.info(
-            f"{user_id} {user_full_name} {time.asctime()} successfully deleted account."
-        )
+        try:
+            db.remove_user(user_id)
+            await bot.send_message(
+                chat_id,
+                "Your account has been DELETED. You can register again.",
+                reply_markup=kb_reg,
+            )
+            logging.info(
+                f"{user_id} {user_full_name} {time.asctime()} successfully deleted."
+            )
+        except KeyError():
+            await bot.send_message(chat_id, "Error acquired.")
         # Finish conversation
         await state.finish()
 
@@ -363,23 +374,6 @@ async def process_callback_query(
             parse_mode=ParseMode.MARKDOWN,
         )
 
-    elif data == "ok":
-        async with state.proxy() as storage_data:
-            begin, end = storage_data["custom_start"], storage_data["custom_end"]
-            diary_data = db.show_entries_range(
-                user_full_name, user_id, storage_data["password"], begin, end
-            )
-
-            for date, msg, msg_time, mood in diary_data:
-                await process_message(
-                    text_format(date, msg, msg_time, mood, user_name), chat_id
-                )
-
-        await ask_proceed(chat_id)
-
-        # Finish conversation
-        await state.finish()
-
     elif data == "prev":
         await ReadStates.read_entry_num.set()
         async with state.proxy() as storage_data:
@@ -394,7 +388,7 @@ async def process_callback_query(
                     offset=storage_data["read_entry_num"],
                 )
             except KeyError():
-                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+                await bot.send_message(chat_id, "Error acquired.")
 
                 # Finish conversation
                 await state.finish()
@@ -436,7 +430,7 @@ async def process_callback_query(
                 )
 
             except KeyError():
-                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+                await bot.send_message(chat_id, "Error acquired.")
 
                 # Finish conversation
                 await state.finish()
@@ -536,7 +530,7 @@ async def end_date_calendar_callback_handler(
                 )
 
             except KeyError():
-                await bot.send_message(chat_id, "Error acquired.", reply_markup=kb_main)
+                await bot.send_message(chat_id, "Error acquired.")
 
                 # Finish conversation
                 await state.finish()
