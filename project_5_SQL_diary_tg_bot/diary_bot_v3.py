@@ -319,21 +319,6 @@ async def process_callback_query(
                 reply_markup=kb_main,
             )
 
-    elif data in ["Male", "Female", "Other"]:
-        async with state.proxy() as storage_data:
-            try:
-                storage_data["gender"] = data
-                await Form.email.set()
-
-                # And send message
-                await bot.send_message(
-                    chat_id, "Please enter your email.", reply_markup=kb_cancel
-                )
-
-            except KeyError():
-                await bot.send_message(chat_id, "Error acquired.")
-                await state.finish()
-
     elif data in ["Don't ask", "Sad", "Will do", "Happy", "Amazing"]:
         async with state.proxy() as storage_data:
             try:
