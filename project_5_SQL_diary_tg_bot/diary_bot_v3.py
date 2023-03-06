@@ -314,7 +314,7 @@ async def process_callback_query(
                 reply_markup=kb_main,
             )
 
-    elif data in ["Male", "Female", "Other"] and state == Form.gender:
+    elif data in ["Male", "Female", "Other"]:
         async with state.proxy() as storage_data:
             try:
                 storage_data["gender"] = data
