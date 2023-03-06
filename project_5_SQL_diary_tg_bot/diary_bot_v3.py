@@ -318,14 +318,12 @@ async def process_callback_query(
         async with state.proxy() as storage_data:
             try:
                 storage_data["gender"] = data
-                await Form.next()
+                await Form.email.set()
 
                 # And send message
                 await bot.send_message(
                     chat_id, "Please enter your email.", reply_markup=kb_cancel
                 )
-                stat = str(dp.current_state(user=user_id))
-                await bot.send_message(chat_id, stat)
 
             except KeyError():
                 await bot.send_message(chat_id, "Error acquired.")
