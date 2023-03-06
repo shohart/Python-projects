@@ -230,7 +230,12 @@ class DeleteAcStates(StatesGroup):
 
 # Handling keyboard events, using callback handlers
 @dp.callback_query_handler(
-    lambda call: call.data in [i[1] for i in buttons_dict.values()], state="*"
+    lambda call: call.data
+    in [
+        i[1]
+        for i in buttons_dict.values() and call.data not in ["Male", "Female", "Other"]
+    ],
+    state="*",
 )
 async def process_callback_query(
     callback_query: types.CallbackQuery, state: FSMContext
@@ -464,6 +469,28 @@ async def process_callback_query(
                     reply_markup=repl_kbd,
                     parse_mode=ParseMode.MARKDOWN,
                 )
+
+
+# Handling gender button
+@dp.callback_query_handler(
+    lambda call: call.data in ["Male", "Female", "Other"], state=Form.gender
+)
+async def process_gender_button(callback_query: types.CallbackQuery, state: FSMContext):
+    data = callback_query.data
+    chat_id = callback_query.message.chat.id
+    async with state.proxy() as storage_data:
+        try:
+            storage_data["gender"] = data
+            await Form.email.set()
+
+            # And send message
+            await bot.send_message(
+                chat_id, "Please enter your email.", reply_markup=kb_cancel
+            )
+
+        except KeyError():
+            await bot.send_message(chat_id, "Error acquired.")
+            await state.finish()
 
 
 # Handling choosing start date for custom calendar
