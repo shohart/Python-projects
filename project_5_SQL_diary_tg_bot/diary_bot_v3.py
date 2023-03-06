@@ -324,7 +324,7 @@ async def process_callback_query(
                 await bot.send_message(
                     chat_id, "Please enter your email.", reply_markup=kb_cancel
                 )
-                stat = dp.current_state(user=user_id)
+                stat = str(dp.current_state(user=user_id))
                 await bot.send_message(chat_id, stat)
 
             except KeyError():
