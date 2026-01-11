@@ -12,9 +12,6 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 
-# Defining class
-
-
 class Database:
     def __init__(self, db_name):
         self.db_name = db_name
@@ -280,19 +277,18 @@ class Database:
 
     def get_user_bithdate(self, tg_id):
         try:
-            conn = self.conn()
-            cur = conn.cursor()
-
             sql = """
                     SELECT birth_year
                     FROM users
-                    WHERE tg_id = ?
-                ;"""
+                    WHERE tg_id = ?;
+                """
+            conn = self.conn()
+            cur = conn.cursor()
             cur.execute(sql, (tg_id,))
-            data = cur.fetchone()[0]
+            result = cur.fetchone()[0]
             conn.close()
 
-            return data
+            return result
 
         except Error as e:
             print(e)
