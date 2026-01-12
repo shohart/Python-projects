@@ -1,0 +1,7 @@
+from .en import TRANSLATIONS as EN_TRANSLATIONS
+from .ru import TRANSLATIONS as RU_TRANSLATIONS
+
+TRANSLATIONS = {
+    "en": EN_TRANSLATIONS,
+    "ru": RU_TRANSLATIONS,
+}
